@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/domain/engine/models/game_config.dart';
 
 part 'level.freezed.dart';
 
@@ -11,7 +11,7 @@ abstract class Level with _$Level {
 
   const factory Level(
     String name,
-    GameState initialState,
+    GameConfig config,
     LevelStatus status,
   ) = _Level;
 
