@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/index.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
+import 'package:s7hack/domain/engine/models/item_diff.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
 
@@ -32,6 +35,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   late final Engine _engine;
 
+  late final StreamSubscription _subscription;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +49,33 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       _initAnim(i);
       _initExplosion(i);
     }
+
+    _initDiffUpdates();
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  void _initDiffUpdates() {
+    _subscription = _engine.changes.listen((state) async {
+      print(state.diff.diff.map((e) => e.toJson()));
+      final explosions = state.diff.diff.whereType<ItemDiffExplosion>();
+      final changes = state.diff.diff.whereType<ItemDiffChange>();
+      await _explode(explosions.map((e) => e.index.as1D(columns)).toList());
+
+      final futures = <Future>[];
+      for (final change in changes) {
+        final controller =
+            _move(change.from.as1D(columns), change.to.as1D(columns));
+        if (controller != null) {
+          futures.add(controller.forward());
+        }
+      }
+      await Future.wait(futures);
+    });
   }
 
   @override
