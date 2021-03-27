@@ -4,14 +4,22 @@ import 'package:s7hack/domain/engine/models/game_state.dart';
 
 import 'models/index.dart';
 
+/**
+ * TODO
+ * генерация поля по размеру
+ * проверка можно ли сматчить в методе свайп
+ * заполнение поля на место схлопнувшихся айтемов
+ * лимитированное количество ходов
+ * условия победы - выбить определенное количество айтемов
+ */
 class Engine {
+  Engine(this._state);
+
   final _controller = StreamController<GameState>.broadcast();
 
   Stream<GameState> get changes => _controller.stream;
 
   GameState _state;
-
-  Engine(this._state);
 
   GameState get state => _state;
 
