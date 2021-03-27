@@ -16,12 +16,11 @@ class Engine {
   GameState get state => _state;
 
   bool swipe(Index from, Index to) {
+    _state = _state.copyWith(stepCount: _state.stepCount + 1);
     return false;
   }
 
-  void _update(GameState newState) {
-
-    _state = newState;
+  void _push() {
     _controller.add(_state);
   }
 
