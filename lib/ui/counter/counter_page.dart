@@ -46,7 +46,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     super.initState();
     _array.addAll(widget.array);
     for (var i = 0; i < widget.array.length; i++) {
-      initAnim(i);
+      _initAnim(i);
     }
   }
 
@@ -66,10 +66,10 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
               children: [
                 for (var i = 0; i < _array.length; i++)
                   FlingDetector(
-                    onRightFling: () => moveRight(i),
-                    onLeftFling: () => moveLeft(i),
-                    onUpFling: () => moveUp(i),
-                    onDownFling: () => moveDown(i),
+                    onRightFling: () => _swap(i, AxisDirection.right),
+                    onLeftFling: () => _swap(i, AxisDirection.left),
+                    onUpFling: () => _swap(i, AxisDirection.up),
+                    onDownFling: () => _swap(i, AxisDirection.down),
                     child: SlideTransition(
                       position: _animation[_array[i]]!,
                       child: ValueView(value: _array[i], size: itemSize),
@@ -83,59 +83,41 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     );
   }
 
-  void initAnim(int index) {
+  void _initAnim(int index) {
     final value = _array[index];
     final animController =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
-    final tween = Tween(begin: Offset.zero, end: Offset(0, 1));
+    final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
     _animController[value] = animController;
     _animation[value] = animation;
     _tween[value] = tween;
   }
 
-  Future<void> move(int index, AxisDirection direction) async {
+  Future<void> _swap(int index, AxisDirection direction) async {
     int toIndex;
-    final from = _array[index];
-    int to;
     switch (direction) {
       case AxisDirection.up:
         toIndex = index - widget.columns;
-        to = _array[toIndex];
-        _tween[from]?.end = Offset(0, -1);
-        _tween[to]?.end = Offset(0, 1);
         break;
       case AxisDirection.right:
         toIndex = index + 1;
-        to = _array[toIndex];
-        _tween[from]?.end = Offset(1, 0);
-        _tween[to]?.end = Offset(-1, 0);
         break;
       case AxisDirection.down:
         toIndex = index + widget.columns;
-        to = _array[toIndex];
-        _tween[from]?.end = Offset(0, 1);
-        _tween[to]?.end = Offset(0, -1);
         break;
       case AxisDirection.left:
         toIndex = index - 1;
-        to = _array[toIndex];
-        _tween[from]?.end = Offset(-1, 0);
-        _tween[to]?.end = Offset(1, 0);
         break;
     }
     await Future.wait([
-      _animController[from]!.forward(),
-      _animController[to]!.forward(),
+      _move(index, toIndex),
+      _move(toIndex, index),
     ]);
-
-    initAnim(index);
-    initAnim(toIndex);
-
-    _swap(index, toIndex);
+    _swapState(index, toIndex);
   }
 
-  void _swap(int a, int b) {
+  void _swapState(int a, int b) {
     final tmp = _array[a];
     _array[a] = _array[b];
     _array[b] = tmp;
@@ -144,13 +126,26 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     print(_array);
   }
 
-  Future<void> moveLeft(int index) => move(index, AxisDirection.left);
+  Future<void> _move(int from, int to) async {
+    final fromValue = _array[from];
+    _tween[fromValue]?.end = _buildOffset(from, to);
 
-  Future<void> moveRight(int index) => move(index, AxisDirection.right);
+    await _animController[fromValue]!.forward();
+    _initAnim(from);
+  }
 
-  Future<void> moveUp(int index) => move(index, AxisDirection.up);
-
-  Future<void> moveDown(int index) => move(index, AxisDirection.down);
+  Offset _buildOffset(int from, int to) {
+    if (from % widget.columns == to % widget.columns) {
+      // на одной вертикальной оси
+      final offset = (to ~/ widget.rows) - (from ~/ widget.rows);
+      return Offset(0, offset.toDouble());
+    } else if (from ~/ widget.rows == to ~/ widget.rows) {
+      // на одной горизонтальной оси
+      final offset = (to % widget.columns) - (from % widget.columns);
+      return Offset(offset.toDouble(), 0);
+    }
+    throw Exception('No valid from/to: $from/$to');
+  }
 }
 
 class ValueView extends StatelessWidget {
