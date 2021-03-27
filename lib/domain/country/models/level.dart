@@ -11,7 +11,7 @@ abstract class Level with _$Level {
   const Level._();
 
   const factory Level(
-    Country country,
+    String name,
   ) = _Level;
 
   factory Level.fromJson(Map<String, dynamic> json) => _$LevelFromJson(json);
