@@ -76,32 +76,22 @@ class Engine {
       collapsedField = removeCollapsed(field, collapsingDiff);
       changeDiff.addAll(calcChangeDiff(collapsedField));
 
-      for (var i = 0; i < collapsedField.length; i++) {
-        for (var j = 0; j < collapsedField[i].length; j++) {
-          final value = collapsedField[i][j];
-          if (value == null) {
-            final newItem = _generateRandomItem(_indexer);
-            createDiff.add(ItemDiffCreate(Index(i, j), newItem));
-            collapsedField[i][j] = newItem;
-          }
-        }
-      }
+      changeDiff.map((e) => e.from).forEach((element) {
+        final newItem = _generateRandomItem(_indexer);
+        createDiff.add(ItemDiffCreate(element, newItem));
+      });
     }
 
     final list = <ItemDiff>[];
     list.addAll(collapsingDiff);
     list.addAll(changeDiff);
+    list.addAll(createDiff);
 
     final diff = Diff(list);
     if (diff.diff.isNotEmpty) {
       _state = _state.copyWith(
         diff: diff,
-        field: collapsedField
-            .map((e) => e
-                .where((element) => element != null)
-                .map((e) => e as Item)
-                .toList())
-            .toList(),
+        // TODO добавить новые
       );
       _push();
     }

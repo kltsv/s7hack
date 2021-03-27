@@ -64,7 +64,6 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initDiffUpdates() {
     _subscription = _engine.changes.listen((state) async {
-      print(state.diff.diff.map((e) => e.toJson()));
       final explosions = state.diff.diff.whereType<ItemDiffExplosion>();
       final changes = state.diff.diff.whereType<ItemDiffChange>();
       final creates = state.diff.diff.whereType<ItemDiffCreate>();
@@ -83,10 +82,14 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
       final futureCreates = <Future>[];
       for (final create in creates) {
-        final controller = _createController[create.index]!;
-        _initCreate(create.index.as1D(columns));
-        futureCreates.add(controller.forward());
+        final controller = _createController[create.index];
+        if (controller != null) {
+          _initCreate(create.index.as1D(columns));
+          futureCreates.add(controller.forward());
+        }
       }
+
+      setState(() {});
 
       _updateArray();
 
@@ -185,8 +188,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initCreate(int index) {
-    final animController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    final animController = AnimationController(
+        duration: Duration(milliseconds: 2000), vsync: this);
     final tween = Tween(begin: 0.0, end: 1.0);
     final curved = CurveTween(curve: Curves.ease);
     final animation = curved.animate(tween.animate(animController));
