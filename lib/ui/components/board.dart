@@ -29,6 +29,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   final _explodeController = <int, AnimationController>{};
   final _explodeAnimation = <int, Animation<double>>{};
 
+  final _createController = <int, AnimationController>{};
+  final _createAnimation = <int, Animation<double>>{};
+
   final _array = <Item?>[];
   late final int columns;
   late final int rows;
@@ -64,6 +67,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       print(state.diff.diff.map((e) => e.toJson()));
       final explosions = state.diff.diff.whereType<ItemDiffExplosion>();
       final changes = state.diff.diff.whereType<ItemDiffChange>();
+      final creates = state.diff.diff.whereType<ItemDiffCreate>();
+
       await _explode(explosions.map((e) => e.index.as1D(columns)).toList());
 
       final futures = <Future>[];
@@ -75,9 +80,19 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         }
       }
       await Future.wait(futures);
-      setState(() {
-        _updateArray();
-      });
+
+      final futureCreates = <Future>[];
+      for (final create in creates) {
+        final controller = _createController[create.index]!;
+        _initCreate(create.index.as1D(columns));
+        futureCreates.add(controller.forward());
+      }
+
+      _updateArray();
+
+      await Future.wait(futureCreates);
+
+      setState(() {});
     });
   }
 
@@ -117,6 +132,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       value: value,
       size: itemSize,
     );
+    widget = _createAnimation[i] != null
+        ? ScaleTransition(scale: _createAnimation[i]!, child: widget)
+        : widget;
     widget = value != null && _explodeAnimation[value.id] != null
         ? ScaleTransition(scale: _explodeAnimation[value.id]!, child: widget)
         : widget;
@@ -164,6 +182,16 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     final animation = curved.animate(tween.animate(animController));
     _explodeController[value.id] = animController;
     _explodeAnimation[value.id] = animation;
+  }
+
+  void _initCreate(int index) {
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    final tween = Tween(begin: 0.0, end: 1.0);
+    final curved = CurveTween(curve: Curves.ease);
+    final animation = curved.animate(tween.animate(animController));
+    _createController[index] = animController;
+    _createAnimation[index] = animation;
   }
 
   Future<void> _swap(int index, AxisDirection direction) async {

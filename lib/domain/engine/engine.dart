@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:s7hack/domain/engine/datagen.dart';
 import 'package:s7hack/domain/engine/indexer.dart';
@@ -6,6 +7,7 @@ import 'package:s7hack/domain/engine/models/diff.dart';
 import 'package:s7hack/domain/engine/models/game_config.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
+import 'package:s7hack/domain/engine/models/item_type.dart';
 
 import 'differ.dart';
 import 'field_modifier.dart';
@@ -67,11 +69,25 @@ class Engine {
 
     final Set<ItemDiffExplosion> collapsingDiff =
         calcCollapsingDiff(changedField);
+    final createDiff = <ItemDiffCreate>[];
     final List<ItemDiffChange> changeDiff = [];
+    var collapsedField = <List<Item?>>[];
     if (collapsingDiff.isNotEmpty) {
-      final collapsedField = removeCollapsed(field, collapsingDiff);
+      collapsedField = removeCollapsed(field, collapsingDiff);
       changeDiff.addAll(calcChangeDiff(collapsedField));
+
+      for (var i = 0; i < collapsedField.length; i++) {
+        for (var j = 0; j < collapsedField[i].length; j++) {
+          final value = collapsedField[i][j];
+          if (value == null) {
+            final newItem = _generateRandomItem(_indexer);
+            createDiff.add(ItemDiffCreate(Index(i, j), newItem));
+            collapsedField[i][j] = newItem;
+          }
+        }
+      }
     }
+
     final list = <ItemDiff>[];
     list.addAll(collapsingDiff);
     list.addAll(changeDiff);
@@ -80,8 +96,12 @@ class Engine {
     if (diff.diff.isNotEmpty) {
       _state = _state.copyWith(
         diff: diff,
-
-        /// todo заполнить дырки в поле
+        field: collapsedField
+            .map((e) => e
+                .where((element) => element != null)
+                .map((e) => e as Item)
+                .toList())
+            .toList(),
       );
       _push();
     }
@@ -89,3 +109,6 @@ class Engine {
     return collapsingDiff.isNotEmpty;
   }
 }
+
+Item _generateRandomItem(ItemIndexer indexer) => Item(indexer.getAndIncrement(),
+    ItemType.values[Random().nextInt(ItemType.values.length)]);
