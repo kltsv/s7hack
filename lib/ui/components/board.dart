@@ -144,30 +144,49 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       return;
     }
 
+    final fromController = _move(index, toIndex);
+    final toController = _move(toIndex, index);
+
+    if (fromController == null || toController == null) {
+      return;
+    }
+    logger.info('Start swap: $index, $toIndex');
+
     await Future.wait([
-      _move(index, toIndex),
-      _move(toIndex, index),
+      fromController.forward(),
+      toController.forward(),
     ]);
-    _swapState(index, toIndex);
+
+    final isAllowed = false;
+    if (isAllowed) {
+      _swapState(index, toIndex);
+    } else {
+      await Future.wait([
+        toController.reverse(),
+        fromController.reverse(),
+      ]);
+    }
+    _initAnim(index);
+    _initAnim(toIndex);
+
+    setState(() {});
   }
 
   void _swapState(int a, int b) {
     final tmp = _array[a];
     _array[a] = _array[b];
     _array[b] = tmp;
-    setState(() {});
     logger.info('Swapped: $a, $b');
   }
 
-  Future<void> _move(int from, int to) async {
+  AnimationController? _move(int from, int to) {
     final fromValue = _array[from]?.id;
     if (fromValue == null) {
-      return;
+      return null;
     }
     _tween[fromValue]!.end = _buildOffset(from, to);
 
-    await _animController[fromValue]!.forward();
-    _initAnim(from);
+    return _animController[fromValue];
   }
 
   Offset _buildOffset(int from, int to) {
