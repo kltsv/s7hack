@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/domain/engine/models/index.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
+import 'package:s7hack/ui/components/fling_detector.dart';
 
 class GameField extends StatelessWidget {
   final List<List<Item>> field;
@@ -12,11 +14,15 @@ class GameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final array = _asArray;
     return CustomScrollView(
       slivers: [
         SliverGrid.count(
           crossAxisCount: field.length,
-          children: _asArray.map((item) => GameItem(item: item)).toList(),
+          children: [
+            for (var i = 0; i < array.length; i++)
+              GameItem(index: Index.from1D(i, array.length), item: array[i])
+          ],
         )
       ],
     );
@@ -26,18 +32,25 @@ class GameField extends StatelessWidget {
 }
 
 class GameItem extends StatelessWidget {
+  final Index index;
   final Item item;
 
-  const GameItem({Key? key, required this.item}) : super(key: key);
+  const GameItem({
+    Key? key,
+    required this.index,
+    required this.item,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-          color: item.type == ItemType.plane ? Colors.green : Colors.blue,
+    return FlingDetector(
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Container(
+            color: item.type == ItemType.plane ? Colors.green : Colors.blue,
+          ),
         ),
       ),
     );
