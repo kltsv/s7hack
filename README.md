@@ -2,15 +2,21 @@
 
 Moscow Hack 2021 S7
 
-## Getting Started
+## Бонусы —> карта страны, карточка страны ?
 
-This project is a starting point for a Flutter application.
+Исландия:
+- получение визы
+- подготовка к поездке
+- достопримечательности
+- бонус на билеты (мок именно какого-то рейса или переход на подборку)
 
-A few resources to get you started if this is your first Flutter project:
+## Три-в-ряд 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Список стран
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Переход по кнопке глобуса с экрана бонусов
+
+# Набросы
+
+Достижения за игру в основной аккаунт ы7
+Пуши, например, после прохождения регистрации в аэропорту: ждёшь? поиграй!
