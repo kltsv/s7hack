@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/logger.dart';
+import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
 
 class Board extends StatefulWidget {
-  final List<Item> array;
-  final int rows;
-  final int columns;
+  final Engine engine;
 
   const Board({
     Key? key,
-    required this.array,
-    required this.rows,
-    required this.columns,
+    required this.engine,
   }) : super(key: key);
 
   @override
@@ -29,12 +26,17 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   final _explodeAnimation = <int, Animation<double>>{};
 
   final _array = <Item?>[];
+  late final int columns;
+  late final int rows;
 
   @override
   void initState() {
     super.initState();
-    _array.addAll(widget.array);
-    for (var i = 0; i < widget.array.length; i++) {
+    _array.addAll(widget.engine.state.field.expand((element) => element));
+    columns = widget.engine.state.field[0].length;
+    rows = widget.engine.state.field.length;
+
+    for (var i = 0; i < _array.length; i++) {
       _initAnim(i);
       _initExplosion(i);
     }
@@ -46,14 +48,14 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       builder: (context, constraints) {
         final size = constraints.smallest;
         final itemSize = size.width == size.shortestSide
-            ? size.width / widget.columns
-            : size.height / widget.rows;
+            ? size.width / columns
+            : size.height / rows;
 
         return CustomScrollView(
           physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverGrid.count(
-              crossAxisCount: widget.columns,
+              crossAxisCount: columns,
               children: [
                 for (var i = 0; i < _array.length; i++) _buildItem(i, itemSize),
               ],
@@ -124,13 +126,13 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     int toIndex;
     switch (direction) {
       case AxisDirection.up:
-        toIndex = index - widget.columns;
+        toIndex = index - columns;
         break;
       case AxisDirection.right:
         toIndex = index + 1;
         break;
       case AxisDirection.down:
-        toIndex = index + widget.columns;
+        toIndex = index + columns;
         break;
       case AxisDirection.left:
         toIndex = index - 1;
@@ -192,22 +194,20 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   Offset _buildOffset(int from, int to) {
     if (_isOnVertical(from, to)) {
       // на одной вертикальной оси
-      final offset = (to ~/ widget.columns) - (from ~/ widget.columns);
+      final offset = (to ~/ columns) - (from ~/ columns);
       return Offset(0, offset.toDouble());
     } else if (_isOnHorizontal(from, to)) {
       // на одной горизонтальной оси
-      final offset = (to % widget.columns) - (from % widget.columns);
+      final offset = (to % columns) - (from % columns);
       return Offset(offset.toDouble(), 0);
     }
     throw Exception(
-        'No valid from/to: $from/$to (rows: ${widget.rows}, columns: ${widget.columns})');
+        'No valid from/to: $from/$to (rows: ${rows}, columns: ${columns})');
   }
 
-  bool _isOnVertical(int from, int to) =>
-      from % widget.columns == to % widget.columns;
+  bool _isOnVertical(int from, int to) => from % columns == to % columns;
 
-  bool _isOnHorizontal(int from, int to) =>
-      from ~/ widget.columns == to ~/ widget.columns;
+  bool _isOnHorizontal(int from, int to) => from ~/ columns == to ~/ columns;
 
   Future<void> _explode(List<int> indexes) async {
     final futures = <Future>[];

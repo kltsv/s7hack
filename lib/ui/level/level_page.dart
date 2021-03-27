@@ -68,11 +68,7 @@ class _LevelPageState extends State<LevelPage> {
                   if (state == null) {
                     return Container(child: Text('Unknown state'));
                   }
-                  return Board(
-                    array: state.field.expand((element) => element).toList(),
-                    columns: state.field[0].length,
-                    rows: state.field.length,
-                  );
+                  return Board(engine: di.engine);
                 },
               ),
             ),
