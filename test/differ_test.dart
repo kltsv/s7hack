@@ -128,13 +128,9 @@ void main() {
       ],
     ];
     final expected = [
-      [null, null, null],
-      [Item(0, ItemType.bag), Item(1, ItemType.bag), Item(2, ItemType.diamond)],
-      [
-        Item(6, ItemType.shield),
-        Item(7, ItemType.shield),
-        Item(8, ItemType.bag)
-      ],
+      ItemDiffChange(Index(0, 0), Index(1, 0)),
+      ItemDiffChange(Index(0, 1), Index(1, 1)),
+      ItemDiffChange(Index(0, 2), Index(1, 2)),
     ];
 
     expect(calcChangeDiff(field), expected);
@@ -144,24 +140,10 @@ void main() {
     final field = [
       [Item(0, ItemType.bag), Item(1, ItemType.bag), Item(2, ItemType.diamond)],
       [Item(3, ItemType.bag), Item(4, ItemType.bag), null],
-      [
-        Item(6, ItemType.shield),
-        Item(7, ItemType.shield),
-        null,
-      ],
+      [Item(6, ItemType.shield), Item(7, ItemType.shield), null],
     ];
     final expected = [
-      [
-        Item(0, ItemType.bag),
-        Item(1, ItemType.bag),
-        null,
-        [Item(3, ItemType.bag), Item(4, ItemType.bag), null],
-        [
-          Item(6, ItemType.shield),
-          Item(7, ItemType.shield),
-          Item(2, ItemType.diamond)
-        ],
-      ],
+      ItemDiffChange(Index(0, 2), Index(2, 2)),
     ];
 
     expect(calcChangeDiff(field), expected);
