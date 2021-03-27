@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:s7hack/app/di.dart';
 
 class CounterPage extends StatefulWidget {
   @override
@@ -7,53 +6,84 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  int _counter = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadCounter();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      _cacheCounter(_counter);
-    });
-  }
-
-  void _cacheCounter(int counter) =>
-      di.cache.save('counter', {'value': counter});
-
-  void _loadCounter() {
-    final raw = di.cache.load('counter');
-    if (raw != null) {
-      _counter = raw['value'] as int;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+      body: SafeArea(child: Board(array: array, rows: 4, columns: 4)),
+    );
+  }
+}
+
+final array = List.generate(16, (index) => index);
+
+class Board extends StatefulWidget {
+  final List<int> array;
+  final int rows;
+  final int columns;
+
+  const Board({
+    Key? key,
+    required this.array,
+    required this.rows,
+    required this.columns,
+  }) : super(key: key);
+
+  @override
+  _BoardState createState() => _BoardState();
+}
+
+class _BoardState extends State<Board> {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.smallest;
+        final itemSize = size.width == size.shortestSide
+            ? size.width / widget.columns
+            : size.height / widget.rows;
+        return CustomScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          slivers: [
+            SliverGrid.count(
+              crossAxisCount: widget.columns,
+              children: [
+                for (var i = 0; i < array.length; i++)
+                  ValueView(value: array[i], size: itemSize),
+              ],
+            )
           ],
+        );
+      },
+    );
+  }
+}
+
+class ValueView extends StatelessWidget {
+  final int value;
+  final double size;
+
+  const ValueView({
+    Key? key,
+    required this.value,
+    required this.size,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Container(
+          color: Colors.green,
+          child: Center(
+            child: Text(
+              value.toString(),
+            ),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
