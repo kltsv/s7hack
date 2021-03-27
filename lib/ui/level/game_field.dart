@@ -5,6 +5,8 @@ import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
 
+import '../../app/logger.dart';
+
 class GameField extends StatelessWidget {
   final List<List<Item>> field;
 
@@ -45,10 +47,22 @@ class GameItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlingDetector(
-      onUpSwipe: () => di.engine.swipe(index, index.up),
-      onDownSwipe: () => di.engine.swipe(index, index.down),
-      onRightSwipe: () => di.engine.swipe(index, index.right),
-      onLeftSwipe: () => di.engine.swipe(index, index.left),
+      onUpFling: () {
+        logger.info('Up fling');
+        di.engine.swipe(index, index.up);
+      },
+      onDownFling: () {
+        logger.info('Down fling');
+        di.engine.swipe(index, index.down);
+      },
+      onRightFling: () {
+        logger.info('Right fling');
+        di.engine.swipe(index, index.right);
+      },
+      onLeftFling: () {
+        logger.info('Left fling');
+        di.engine.swipe(index, index.left);
+      },
       child: AspectRatio(
         aspectRatio: 1,
         child: Padding(

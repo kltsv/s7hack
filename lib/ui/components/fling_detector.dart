@@ -6,35 +6,39 @@ class FlingDetector extends StatelessWidget {
   final int sensitivity;
   final Widget? child;
 
-  final VoidCallback? onDownSwipe;
-  final VoidCallback? onUpSwipe;
-  final VoidCallback? onRightSwipe;
-  final VoidCallback? onLeftSwipe;
+  final VoidCallback? onDownFling;
+  final VoidCallback? onUpFling;
+  final VoidCallback? onRightFling;
+  final VoidCallback? onLeftFling;
 
   const FlingDetector({
     Key? key,
     this.child,
-    this.onDownSwipe,
-    this.onUpSwipe,
-    this.onRightSwipe,
-    this.onLeftSwipe,
+    this.onDownFling,
+    this.onUpFling,
+    this.onRightFling,
+    this.onLeftFling,
     this.sensitivity = _defaultSensitivity,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onHorizontalDragUpdate: (details) {
-      if (details.delta.dx > sensitivity) {
-        onRightSwipe?.call();
-      } else if (details.delta.dx < -sensitivity) {
-        onLeftSwipe?.call();
-      }
-    }, onVerticalDragUpdate: (details) {
-      if (details.delta.dy > sensitivity) {
-        onDownSwipe?.call();
-      } else if (details.delta.dy < -sensitivity) {
-        onUpSwipe?.call();
-      }
-    });
+    return GestureDetector(
+      child: child,
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx > sensitivity) {
+          onRightFling?.call();
+        } else if (details.delta.dx < -sensitivity) {
+          onLeftFling?.call();
+        }
+      },
+      onVerticalDragUpdate: (details) {
+        if (details.delta.dy > sensitivity) {
+          onDownFling?.call();
+        } else if (details.delta.dy < -sensitivity) {
+          onUpFling?.call();
+        }
+      },
+    );
   }
 }

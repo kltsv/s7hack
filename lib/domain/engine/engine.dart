@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:s7hack/domain/engine/indexer.dart';
+import 'package:s7hack/domain/engine/models/game_config.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
 
@@ -18,13 +19,15 @@ import 'models/item.dart';
 ///
 /// после каждого хода проверка, возможно ли на данном поле совершить еще один ход - если нет, решафлим поле
 class Engine {
-  Engine(this._state);
+  Engine(GameConfig config) {
+    // TODO state from config
+  }
 
   final _controller = StreamController<GameState>.broadcast();
 
   Stream<GameState> get changes => _controller.stream;
 
-  GameState _state;
+  GameState _state = GameState.empty;
   ItemIndexer _indexer = ItemIndexer();
 
   GameState get state => _state;
