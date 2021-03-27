@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
@@ -147,7 +148,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     _array[a] = _array[b];
     _array[b] = tmp;
     setState(() {});
-    print('Swapped: $a, $b');
+    logger.info('Swapped: $a, $b');
   }
 
   Future<void> _move(int from, int to) async {
@@ -155,7 +156,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     if (fromValue == null) {
       return;
     }
-    _tween[fromValue]?.end = _buildOffset(from, to);
+    _tween[fromValue]!.end = _buildOffset(from, to);
 
     await _animController[fromValue]!.forward();
     _initAnim(from);
@@ -164,7 +165,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   Offset _buildOffset(int from, int to) {
     if (from % widget.columns == to % widget.columns) {
       // на одной вертикальной оси
-      final offset = (to ~/ widget.rows) - (from ~/ widget.rows);
+      final offset = (to ~/ widget.columns) - (from ~/ widget.columns);
       return Offset(0, offset.toDouble());
     } else if (from ~/ widget.columns == to ~/ widget.columns) {
       // на одной горизонтальной оси
@@ -185,7 +186,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       _initExplosion(i);
     }
     _clearValue(indexes);
-    print('Exploded: $indexes');
+    logger.info('Exploded: $indexes');
   }
 
   Future<void> _explodeAt(int index) async {
