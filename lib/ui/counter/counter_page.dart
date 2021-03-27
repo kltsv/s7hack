@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/domain/engine/models/item.dart';
+import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
 
 class CounterPage extends StatefulWidget {
@@ -13,13 +15,15 @@ class _CounterPageState extends State<CounterPage> {
       appBar: AppBar(),
       body: SafeArea(
           child: Board(
-              array: List.generate(16, (index) => index), rows: 4, columns: 4)),
+              array: List.generate(16, (index) => Item(index, ItemType.plane)),
+              rows: 4,
+              columns: 4)),
     );
   }
 }
 
 class Board extends StatefulWidget {
-  final List<int> array;
+  final List<Item> array;
   final int rows;
   final int columns;
 
@@ -42,7 +46,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   final _explodeController = <int, AnimationController>{};
   final _explodeAnimation = <int, Animation<double>>{};
 
-  final _array = <int?>[];
+  final _array = <Item?>[];
 
   @override
   void initState() {
@@ -81,12 +85,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   Widget _buildItem(int i, double itemSize) {
     final value = _array[i];
     Widget widget = ValueView(value: value, size: itemSize);
-    widget = value != null && _explodeAnimation[value] != null
-        ? ScaleTransition(scale: _explodeAnimation[value]!, child: widget)
+    widget = value != null && _explodeAnimation[value.id] != null
+        ? ScaleTransition(scale: _explodeAnimation[value.id]!, child: widget)
         : widget;
-    widget = value != null && _animation[value] != null
+    widget = value != null && _animation[value.id] != null
         ? SlideTransition(
-            position: _animation[value]!,
+            position: _animation[value.id]!,
             child: widget,
           )
         : widget;
@@ -108,12 +112,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       return;
     }
     final animController =
-        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
-    _animController[value] = animController;
-    _animation[value] = animation;
-    _tween[value] = tween;
+    _animController[value.id] = animController;
+    _animation[value.id] = animation;
+    _tween[value.id] = tween;
   }
 
   void _initExplosion(int index) {
@@ -126,8 +130,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));
-    _explodeController[value] = animController;
-    _explodeAnimation[value] = animation;
+    _explodeController[value.id] = animController;
+    _explodeAnimation[value.id] = animation;
   }
 
   Future<void> _swap(int index, AxisDirection direction) async {
@@ -159,11 +163,10 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     _array[b] = tmp;
     setState(() {});
     print('Swapped: $a, $b');
-    print(_array);
   }
 
   Future<void> _move(int from, int to) async {
-    final fromValue = _array[from];
+    final fromValue = _array[from]?.id;
     if (fromValue == null) {
       return;
     }
@@ -202,7 +205,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       return;
     }
 
-    await _explodeController[value]!.forward();
+    await _explodeController[value.id]!.forward();
   }
 
   void _clearValue(List<int> indexes) {
@@ -212,17 +215,17 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         continue;
       }
       _array[i] = null;
-      _animController.remove(value);
-      _tween.remove(value);
-      _animation.remove(value);
-      _explodeAnimation.remove(value);
+      _animController.remove(value.id);
+      _tween.remove(value.id);
+      _animation.remove(value.id);
+      _explodeAnimation.remove(value.id);
     }
     setState(() {});
   }
 }
 
 class ValueView extends StatelessWidget {
-  final int? value;
+  final Item? value;
   final double size;
 
   const ValueView({
@@ -233,18 +236,14 @@ class ValueView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final v = value;
     return Container(
       width: size,
       height: size,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
-          color: value != null ? Colors.green : null,
-          child: Center(
-            child: Text(
-              value?.toString() ?? '',
-            ),
-          ),
+          child: v != null ? Image.asset(v.type.asset) : null,
         ),
       ),
     );
