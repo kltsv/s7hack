@@ -14,7 +14,7 @@ class App extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       navigatorKey: di.navigation.navigationKey,
-      initialRoute: Routes.country,
+      initialRoute: Routes.home,
       onGenerateRoute: Routes.onGenerateRoute,
     );
   }

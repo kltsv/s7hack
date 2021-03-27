@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/navigation/routes.dart';
+import 'package:s7hack/domain/country/models/country.dart';
 
 import '../logger.dart';
 
@@ -7,17 +9,20 @@ class Navigation {
 
   const Navigation(this.navigationKey);
 
-  void pushNamed(String route, {Object? args}) {
-    logger.info('Push route: $route${args != null ? ', $args' : ''}');
-    _state?.pushNamed(route, arguments: args);
-  }
+  void openCountry(Country country) =>
+      _pushNamed(Routes.country, args: country);
 
   void popToHome() {
     logger.info('Pop home');
     _state?.popUntil((route) => route.isFirst);
   }
 
-  void pop() {
+  void _pushNamed(String route, {Object? args}) {
+    logger.info('Push route: $route${args != null ? ', $args' : ''}');
+    _state?.pushNamed(route, arguments: args);
+  }
+
+  void _pop() {
     logger.info('Pop route');
     _state?.pop();
   }

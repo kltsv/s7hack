@@ -13,6 +13,7 @@ abstract class Country with _$Country {
   const factory Country(
     String id,
     String name,
+    String imageAsset,
     List<Level> levels,
   ) = _Country;
 

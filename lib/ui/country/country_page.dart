@@ -23,10 +23,7 @@ class _CountryPageState extends State<CountryPage> {
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              leading: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const HomeButton(),
-              ),
+              leading: const HomeButton(),
               expandedHeight: 200,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
