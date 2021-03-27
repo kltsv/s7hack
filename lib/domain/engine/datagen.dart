@@ -21,6 +21,8 @@ List<List<Item>> generateField(int rows, int columns, ItemIndexer indexer) {
         indexer: indexer,
       ));
     }
+    // TODO проверять, не появилось ли 3 в ряд после шаффла
+    field.shuffle();
   }
 
   return field;
