@@ -13,7 +13,7 @@ class App extends StatelessWidget {
         return child!;
       },
       navigatorKey: di.navigation.navigationKey,
-      initialRoute: Routes.counter,
+      initialRoute: Routes.home,
       onGenerateRoute: Routes.onGenerateRoute,
     );
   }

@@ -65,7 +65,11 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   Widget _buildItem(int i, double itemSize) {
     final value = _array[i];
-    Widget widget = ValueView(value: value, size: itemSize);
+    Widget widget = ValueView(
+      key: value != null ? ValueKey(value.id) : null,
+      value: value,
+      size: itemSize,
+    );
     widget = value != null && _explodeAnimation[value.id] != null
         ? ScaleTransition(scale: _explodeAnimation[value.id]!, child: widget)
         : widget;
@@ -167,7 +171,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       final offset = (to % widget.columns) - (from % widget.columns);
       return Offset(offset.toDouble(), 0);
     }
-    throw Exception('No valid from/to: $from/$to');
+    throw Exception(
+        'No valid from/to: $from/$to (rows: ${widget.rows}, columns: ${widget.columns})');
   }
 
   Future<void> _explode(List<int> indexes) async {

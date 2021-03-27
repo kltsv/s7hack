@@ -3,8 +3,8 @@ import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/ui/components/board.dart';
 import 'package:s7hack/ui/components/home_button.dart';
-import 'package:s7hack/ui/level/game_field.dart';
 
 class LevelPage extends StatefulWidget {
   static Map<String, dynamic> args(Level level, {bool fromRoot = false}) => {
@@ -68,7 +68,11 @@ class _LevelPageState extends State<LevelPage> {
                   if (state == null) {
                     return Container(child: Text('Unknown state'));
                   }
-                  return GameField(state: state);
+                  return Board(
+                    array: state.field.expand((element) => element).toList(),
+                    columns: state.field[0].length,
+                    rows: state.field.length,
+                  );
                 },
               ),
             ),
