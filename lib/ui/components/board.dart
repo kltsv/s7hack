@@ -136,6 +136,14 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         toIndex = index - 1;
         break;
     }
+    final outOfField = toIndex < 0 ||
+        toIndex >= _array.length ||
+        (!_isOnVertical(index, toIndex) && !_isOnHorizontal(index, toIndex));
+
+    if (outOfField) {
+      return;
+    }
+
     await Future.wait([
       _move(index, toIndex),
       _move(toIndex, index),
@@ -163,11 +171,11 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   Offset _buildOffset(int from, int to) {
-    if (from % widget.columns == to % widget.columns) {
+    if (_isOnVertical(from, to)) {
       // на одной вертикальной оси
       final offset = (to ~/ widget.columns) - (from ~/ widget.columns);
       return Offset(0, offset.toDouble());
-    } else if (from ~/ widget.columns == to ~/ widget.columns) {
+    } else if (_isOnHorizontal(from, to)) {
       // на одной горизонтальной оси
       final offset = (to % widget.columns) - (from % widget.columns);
       return Offset(offset.toDouble(), 0);
@@ -175,6 +183,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     throw Exception(
         'No valid from/to: $from/$to (rows: ${widget.rows}, columns: ${widget.columns})');
   }
+
+  bool _isOnVertical(int from, int to) =>
+      from % widget.columns == to % widget.columns;
+
+  bool _isOnHorizontal(int from, int to) =>
+      from ~/ widget.columns == to ~/ widget.columns;
 
   Future<void> _explode(List<int> indexes) async {
     final futures = <Future>[];
