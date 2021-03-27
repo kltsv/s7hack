@@ -21,7 +21,7 @@ class GameField extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverGrid.count(
-          crossAxisCount: field.length,
+          crossAxisCount: field[0].length,
           children: [
             for (var i = 0; i < array.length; i++)
               GameItem(index: Index.from1D(i, array.length), item: array[i])

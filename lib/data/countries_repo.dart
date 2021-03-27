@@ -16,7 +16,7 @@ const _iceland = Country(
   'Исландия',
   AppAssets.earthLogo, // TODO replace
   [
-    Level('Снайфедльс', GameConfig(3, 3), LevelStatus.available),
+    Level('Снайфедльс', GameConfig(8, 6), LevelStatus.available),
     Level('Фаградальсфьядль', GameConfig(3, 3), LevelStatus.unavailable),
     Level('Эйяфьядлайёкюдль', GameConfig(3, 3), LevelStatus.unavailable),
     Level('Хваннадальсхнукюр', GameConfig(3, 3), LevelStatus.unavailable),
