@@ -9,7 +9,7 @@ part 'item_diff.g.dart';
 abstract class ItemDiff with _$ItemDiff {
   const ItemDiff._();
 
-  const factory ItemDiff.explosion(Index item) = ItemDiffExplosion;
+  const factory ItemDiff.explosion(Index index) = ItemDiffExplosion;
 
   const factory ItemDiff.change(Index from, Index to) = ItemDiffChange;
 

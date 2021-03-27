@@ -12,7 +12,6 @@ void main() {
       [Item(6, ItemType.shield), Item(7, ItemType.auto), Item(8, ItemType.bag)],
     ];
     final Set<Index> expected = { Index(0, 1), Index(1, 1), Index(2, 1), };
-    expect(findMatches(field, ItemType.auto, Index(0, 1)), expected);
     expect(findMatches(field, ItemType.auto, Index(2, 1)), expected);
   });
 
@@ -23,7 +22,6 @@ void main() {
       [Item(6, ItemType.auto), Item(7, ItemType.auto), Item(8, ItemType.auto)],
     ];
     final Set<Index> expected = { Index(2, 0), Index(2, 1), Index(2, 2), };
-    expect(findMatches(field, ItemType.auto, Index(2, 2)), expected);
     expect(findMatches(field, ItemType.auto, Index(2, 0)), expected);
   });
 }

@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
-import 'package:s7hack/domain/engine/models/item_type.dart';
-import 'package:s7hack/utils/extensions.dart';
 
-import 'matcher.dart';
+import 'differ.dart';
 import 'models/index.dart';
 import 'models/item.dart';
 
@@ -57,32 +55,11 @@ class Engine {
     changedField[from.i][from.j] = toItem;
     changedField[to.i][to.j] = fromItem;
 
-    final List<ItemDiff> collapsingDiff = _calcCollapsingDiff(changedField);
+    final Set<ItemDiff> collapsingDiff = calcCollapsingDiff(changedField);
     if (collapsingDiff.isNotEmpty) {
       /// todo
     }
 
-    return true; /// todo
-  }
-
-  List<ItemDiff> _calcCollapsingDiff(List<List<Item>> field) {
-    final List<ItemDiff> diffs = [];
-    final int columns = field.length;
-    /// todo здесь хрень какая-то
-    final int rows = columns > 0 ? (field.getSafe(0)?.length ?? 0) : 0;
-
-    /// todo
-    for (var i = 0; i < columns; i++) {
-      final List<Item> column = field[i];
-      for (var j = 0; j < rows; j++) {
-        final Item item = column[j];
-        final ItemType type = item.type;
-        final Index index = Index(i, j);
-        final Set<Index> matches = findMatches(field, type, index);
-        /// todo
-      }
-    }
-
-    return diffs;
+    return true;
   }
 }

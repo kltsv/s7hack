@@ -29,14 +29,10 @@ List<Index> _findMatchesInDirection(
   final List<Index> matches = [];
   bool canContinueSearch =
       _canSearchToDirection(field, pointer, direction, _matchesMin - 1);
-  print(
-      "_findMatchesInDirection: start $direction $canContinueSearch $pointer $type");
 
   while (canContinueSearch) {
     final Item nextItem = field[pointer.i][pointer.j];
     if (nextItem.type == type) {
-      print(
-          "_findMatchesInDirection: got sovpadenie! $pointer ${matches.length}");
       matches.add(pointer);
       pointer = movePointerToDirection(pointer, direction);
       int matchesMinIndex = _matchesMin - matches.length - 1;
@@ -45,13 +41,10 @@ List<Index> _findMatchesInDirection(
       }
       canContinueSearch =
           _canSearchToDirection(field, pointer, direction, matchesMinIndex);
-      print(
-          "_findMatchesInDirection: got sovpadenie! canContinueSearch=$canContinueSearch matchesMinIndex=$matchesMinIndex");
     } else {
       canContinueSearch = false;
     }
   }
-  print("_findMatchesInDirection: end $direction $matches");
 
   if (matches.length < _matchesMin) {
     matches.clear();
