@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:s7hack/domain/engine/indexer.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
 
@@ -24,7 +25,7 @@ class Engine {
   Stream<GameState> get changes => _controller.stream;
 
   GameState _state;
-  int _itemsIdsCounter = 0;
+  ItemIndexer _indexer = ItemIndexer();
 
   GameState get state => _state;
 
