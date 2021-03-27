@@ -9,10 +9,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: AppAssets.appName,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      builder: (context, child) {
+        return child!;
+      },
       navigatorKey: di.navigation.navigationKey,
       initialRoute: Routes.home,
       onGenerateRoute: Routes.onGenerateRoute,
