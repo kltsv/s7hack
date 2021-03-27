@@ -39,7 +39,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   final _animation = <int, Animation<Offset>>{};
   final _tween = <int, Tween<Offset>>{};
 
-  final _array = <int>[];
+  final _explodeAnimation = <int, Animation<double>>{};
+
+  final _array = <int?>[];
 
   @override
   void initState() {
@@ -58,23 +60,14 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         final itemSize = size.width == size.shortestSide
             ? size.width / widget.columns
             : size.height / widget.rows;
+
         return CustomScrollView(
           physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverGrid.count(
               crossAxisCount: widget.columns,
               children: [
-                for (var i = 0; i < _array.length; i++)
-                  FlingDetector(
-                    onRightFling: () => _swap(i, AxisDirection.right),
-                    onLeftFling: () => _swap(i, AxisDirection.left),
-                    onUpFling: () => _swap(i, AxisDirection.up),
-                    onDownFling: () => _swap(i, AxisDirection.down),
-                    child: SlideTransition(
-                      position: _animation[_array[i]]!,
-                      child: ValueView(value: _array[i], size: itemSize),
-                    ),
-                  ),
+                for (var i = 0; i < _array.length; i++) _buildItem(i, itemSize),
               ],
             )
           ],
@@ -83,8 +76,35 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildItem(int i, double itemSize) {
+    final value = _array[i];
+    Widget widget = ValueView(value: value, size: itemSize);
+    widget = value != null && _explodeAnimation[value] != null
+        ? ScaleTransition(scale: _explodeAnimation[value]!, child: widget)
+        : widget;
+    widget = value != null && _animation[value] != null
+        ? SlideTransition(
+            position: _animation[value]!,
+            child: widget,
+          )
+        : widget;
+    return GestureDetector(
+      onTap: () => _explode([i]),
+      child: FlingDetector(
+        onRightFling: () => _swap(i, AxisDirection.right),
+        onLeftFling: () => _swap(i, AxisDirection.left),
+        onUpFling: () => _swap(i, AxisDirection.up),
+        onDownFling: () => _swap(i, AxisDirection.down),
+        child: widget,
+      ),
+    );
+  }
+
   void _initAnim(int index) {
     final value = _array[index];
+    if (value == null) {
+      return;
+    }
     final animController =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
@@ -128,6 +148,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   Future<void> _move(int from, int to) async {
     final fromValue = _array[from];
+    if (fromValue == null) {
+      return;
+    }
     _tween[fromValue]?.end = _buildOffset(from, to);
 
     await _animController[fromValue]!.forward();
@@ -146,15 +169,56 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     }
     throw Exception('No valid from/to: $from/$to');
   }
+
+  Future<void> _explode(List<int> indexes) async {
+    print('Explode: $indexes');
+    final futures = <Future>[];
+    for (final i in indexes) {
+      futures.add(_explodeAt(i));
+    }
+    await Future.wait(futures);
+    _clearValue(indexes);
+    print('Exploded');
+  }
+
+  Future<void> _explodeAt(int index) async {
+    final value = _array[index];
+    if (value == null) {
+      return;
+    }
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    final tween = Tween(begin: 1.0, end: 0.0);
+    final animation = tween.animate(animController);
+    _explodeAnimation[value] = animation;
+
+    await animController.forward();
+  }
+
+  void _clearValue(List<int> indexes) {
+    for (final i in indexes) {
+      final value = _array[i];
+      print('LGGR $value');
+      if (value == null) {
+        continue;
+      }
+      _array[i] = null;
+      _animController.remove(value);
+      _tween.remove(value);
+      _animation.remove(value);
+      _explodeAnimation.remove(value);
+    }
+    setState(() {});
+  }
 }
 
 class ValueView extends StatelessWidget {
-  final int value;
+  final int? value;
   final double size;
 
   const ValueView({
     Key? key,
-    required this.value,
+    this.value,
     required this.size,
   }) : super(key: key);
 
@@ -166,10 +230,10 @@ class ValueView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
-          color: Colors.green,
+          color: value != null ? Colors.green : null,
           child: Center(
             child: Text(
-              value.toString(),
+              value?.toString() ?? '',
             ),
           ),
         ),
