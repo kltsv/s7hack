@@ -41,7 +41,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _engine = widget.engine;
-    _array.addAll(widget.engine.state.field.expand((element) => element));
+    _updateArray();
     columns = widget.engine.state.field[0].length;
     rows = widget.engine.state.field.length;
 
@@ -75,7 +75,15 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         }
       }
       await Future.wait(futures);
+      setState(() {
+        _updateArray();
+      });
     });
+  }
+
+  void _updateArray() {
+    _array.clear();
+    _array.addAll(_engine.state.field.expand((element) => element));
   }
 
   @override
