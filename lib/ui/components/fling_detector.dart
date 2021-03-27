@@ -25,17 +25,17 @@ class FlingDetector extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: child,
-      onHorizontalDragUpdate: (details) {
-        if (details.delta.dx > sensitivity) {
+      onHorizontalDragEnd: (details) {
+        if ((details.primaryVelocity ?? 0) > 0) {
           onRightFling?.call();
-        } else if (details.delta.dx < -sensitivity) {
+        } else if ((details.primaryVelocity ?? 0) < 0) {
           onLeftFling?.call();
         }
       },
-      onVerticalDragUpdate: (details) {
-        if (details.delta.dy > sensitivity) {
+      onVerticalDragEnd: (details) {
+        if ((details.primaryVelocity ?? 0) > 0) {
           onDownFling?.call();
-        } else if (details.delta.dy < -sensitivity) {
+        } else if ((details.primaryVelocity ?? 0) < 0) {
           onUpFling?.call();
         }
       },

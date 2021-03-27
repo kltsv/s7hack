@@ -68,7 +68,7 @@ class GameItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Container(
-            color: item.type == ItemType.plane ? Colors.green : Colors.blue,
+            child: Image.asset(item.type.asset),
           ),
         ),
       ),
