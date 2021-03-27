@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:s7hack/app/assets/assets.dart';
@@ -11,9 +12,10 @@ class Cache {
   Box<String>? _cache;
 
   Future<void> init() async {
-    // TODO check platform, do not init on web
-    var dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
+    if (!kIsWeb) {
+      var dir = await getApplicationDocumentsDirectory();
+      Hive.init(dir.path);
+    }
     _cache = await Hive.openBox<String>(_cacheBoxKey);
   }
 
