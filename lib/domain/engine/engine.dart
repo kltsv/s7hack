@@ -60,6 +60,6 @@ class Engine {
       /// todo
     }
 
-    return true;
+    return collapsingDiff.isNotEmpty;
   }
 }
