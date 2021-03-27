@@ -8,22 +8,26 @@ class Navigation {
   const Navigation(this.navigationKey);
 
   void pushNamed(String route, {Object? args}) {
-    final state = navigationKey.currentState;
-    if (state == null) {
-      logger.warning('Could not push route "$route": navigation state is null');
-      return;
-    }
-    logger.info('Push route: $route');
-    state.pushNamed(route, arguments: args);
+    logger.info('Push route: $route${args != null ? ', $args' : ''}');
+    _state?.pushNamed(route, arguments: args);
+  }
+
+  void popToHome() {
+    logger.info('Pop home');
+    _state?.popUntil((route) => route.isFirst);
   }
 
   void pop() {
+    logger.info('Pop route');
+    _state?.pop();
+  }
+
+  NavigatorState? get _state {
     final state = navigationKey.currentState;
     if (state == null) {
-      logger.warning('Could not pop route: navigation state is null');
-      return;
+      logger.warning('Could not get navigation state: null');
+      return null;
     }
-    logger.info('Pop route');
-    state.pop();
+    return state;
   }
 }
