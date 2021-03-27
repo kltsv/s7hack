@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:s7hack/domain/engine/datagen.dart';
 import 'package:s7hack/domain/engine/indexer.dart';
 import 'package:s7hack/domain/engine/models/game_config.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
@@ -21,6 +22,7 @@ import 'models/item.dart';
 class Engine {
   Engine(GameConfig config) {
     // TODO state from config
+    _state = _state.copyWith(field: generateField(config.rows, config.columns, _indexer));
   }
 
   final _controller = StreamController<GameState>.broadcast();

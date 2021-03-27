@@ -11,25 +11,27 @@ List<List<Item>> generateField(int rows, int columns, ItemIndexer indexer) {
   final List<List<Item>> field = [];
 
   for (var i = 0; i < rows; i++) {
+    field.add([]);
     for (var j = 0; j < columns; j++) {
-      field[i][j] = _getRandomItem(
+      field[i].add(_getRandomItem(
         left: field.getSafe(i)?.getSafe(j - 1),
         top: field.getSafe(i - 1)?.getSafe(j),
         right: field.getSafe(i)?.getSafe(j + 1),
         bottom: field.getSafe(i + 1)?.getSafe(j),
         indexer: indexer,
-      );
+      ));
     }
   }
 
   return field;
 }
 
-Item _getRandomItem({Item? left,
-  Item? top,
-  Item? right,
-  Item? bottom,
-  required ItemIndexer indexer}) {
+Item _getRandomItem(
+    {Item? left,
+    Item? top,
+    Item? right,
+    Item? bottom,
+    required ItemIndexer indexer}) {
   final values = ItemType.values;
   final Map<ItemType, int> nearby = {};
   [left, top, right, bottom].forEach((element) {
@@ -38,9 +40,9 @@ Item _getRandomItem({Item? left,
       nearby[element.type] = count + 1;
     }
   });
-  ItemType type = values.length == nearby.length
-      ? values[Random().nextInt(values.length)]
-      : _getLessMetType(nearby);
+  ItemType type = values.length < nearby.length
+      ? _getLessMetType(nearby)
+      : values[Random().nextInt(values.length)];
   return Item(indexer.getAndIncrement(), type);
 }
 
