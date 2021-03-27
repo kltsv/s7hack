@@ -74,7 +74,7 @@ class Engine {
     var collapsedField = <List<Item?>>[];
     if (collapsingDiff.isNotEmpty) {
       collapsedField = removeCollapsed(field, collapsingDiff);
-      changeDiff.addAll(calcChangeDiff(collapsedField));
+      changeDiff.addAll(newCalcChangeDiff(collapsedField));
 
       changeDiff.map((e) => e.from).forEach((element) {
         final newItem = _generateRandomItem(_indexer);

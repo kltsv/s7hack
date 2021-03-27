@@ -51,3 +51,28 @@ List<ItemDiffChange> calcChangeDiff(List<List<Item?>> collapsedField) {
 
   return diff;
 }
+
+List<ItemDiffChange> newCalcChangeDiff(List<List<Item?>> collapsedField) {
+  final diff = <ItemDiffChange>[];
+  final columns = collapsedField[0].length;
+
+  for (var j = 0; j < columns; j++) {
+    int counter = 0;
+    for (var i = 0; i < collapsedField.length; i++) {
+      final item = collapsedField[i][j];
+      if (item == null) {
+        counter++;
+      }
+    }
+    if (counter > 0) {
+      for (var i = 0; i < collapsedField.length; i++) {
+        final item = collapsedField[i][j];
+        if (item != null) {
+          diff.add(ItemDiffChange(Index(i, j), Index(i + counter, j)));
+        }
+      }
+    }
+  }
+
+  return diff;
+}
