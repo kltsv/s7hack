@@ -25,34 +25,24 @@ Set<ItemDiffExplosion> calcCollapsingDiff(List<List<Item>> field) {
   return diffs;
 }
 
-List<List<Item?>> removeCollapsed(
-  List<List<Item>> field,
-  Set<ItemDiffExplosion> collapsingDiff,
-) {
-  final List<List<Item?>> newField =
-      field.map((r) => r.map((c) => c as Item?).toList()).toList();
-  collapsingDiff.forEach((element) {
-    newField[element.index.i][element.index.j] = null;
-  });
-  return newField;
-}
-
 List<ItemDiffChange> calcChangeDiff(
   List<List<Item?>> collapsedField,
-  Set<ItemDiffExplosion> collapsingDiff,
 ) {
   final diff = <ItemDiffChange>[];
-  final Set<int> affectedColumns = collapsingDiff.map((e) => e.index.j).toSet();
   final int rows = collapsedField.length;
   final int columns = rows > 0 ? (collapsedField.getSafe(0)?.length ?? 0) : 0;
 
-  for (var i = 0; i < rows; i++) {
+  for (var i = rows; i > 0 ; i--) {
     for (var j = 0; j < columns; j++) {
+      final item = collapsedField[i][j];
+      if (item == null) {
 
+        for (var k = i - 1; k > 0 ; k--) {
+          break;
+        }
+      }
     }
   }
-
-  collapsingDiff.forEach((element) {});
 
   return [];
 }

@@ -8,6 +8,7 @@ import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
 
 import 'differ.dart';
+import 'field_modifier.dart';
 import 'models/index.dart';
 import 'models/item.dart';
 
@@ -69,7 +70,7 @@ class Engine {
     final List<ItemDiffChange> changeDiff = [];
     if (collapsingDiff.isNotEmpty) {
       final collapsedField = removeCollapsed(field, collapsingDiff);
-      changeDiff.addAll(calcChangeDiff(collapsedField, collapsingDiff));
+      changeDiff.addAll(calcChangeDiff(collapsedField));
     }
     final list = <ItemDiff>[];
     list.addAll(collapsingDiff);
@@ -82,6 +83,7 @@ class Engine {
 
         /// todo заполнить дырки в поле
       );
+      _push();
     }
 
     return collapsingDiff.isNotEmpty;
