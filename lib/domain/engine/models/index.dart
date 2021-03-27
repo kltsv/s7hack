@@ -14,7 +14,7 @@ abstract class Index with _$Index {
     int j,
   ) = _Index;
 
-  factory Index.from1D(int i, int size) => Index(i ~/ size, i % size);
+  factory Index.from1D(int i, int columns) => Index(i ~/ columns, i % columns);
 
   factory Index.fromJson(Map<String, dynamic> json) => _$IndexFromJson(json);
 }

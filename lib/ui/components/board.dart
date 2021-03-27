@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/engine/engine.dart';
+import 'package:s7hack/domain/engine/models/index.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
@@ -29,9 +30,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   late final int columns;
   late final int rows;
 
+  late final Engine _engine;
+
   @override
   void initState() {
     super.initState();
+    _engine = widget.engine;
     _array.addAll(widget.engine.state.field.expand((element) => element));
     columns = widget.engine.state.field[0].length;
     rows = widget.engine.state.field.length;
@@ -159,7 +163,11 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       toController.forward(),
     ]);
 
-    final isAllowed = false;
+    final isAllowed = _engine.swipe(
+        Index.from1D(index, columns), Index.from1D(toIndex, columns));
+
+    logger.info('Allowed to swap: $isAllowed');
+
     if (isAllowed) {
       _swapState(index, toIndex);
     } else {
