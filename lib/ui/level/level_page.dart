@@ -52,7 +52,7 @@ class _LevelPageState extends State<LevelPage> {
                   if (state == null) {
                     return Container(child: Text('Unknown state'));
                   }
-                  return GameField(field: state.field);
+                  return GameField(state: state);
                 },
               ),
             ),
