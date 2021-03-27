@@ -6,13 +6,14 @@ import 'package:s7hack/domain/engine/models/item_type.dart';
 import 'package:s7hack/ui/components/fling_detector.dart';
 
 import '../../app/logger.dart';
+import '../../domain/engine/models/game_state.dart';
 
 class GameField extends StatelessWidget {
-  final List<List<Item>> field;
+  final GameState state;
 
   const GameField({
     Key? key,
-    required this.field,
+    required this.state,
   }) : super(key: key);
 
   @override
@@ -21,7 +22,7 @@ class GameField extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverGrid.count(
-          crossAxisCount: field[0].length,
+          crossAxisCount: state.field[0].length,
           children: [
             for (var i = 0; i < array.length; i++)
               GameItem(index: Index.from1D(i, array.length), item: array[i])
@@ -31,7 +32,7 @@ class GameField extends StatelessWidget {
     );
   }
 
-  List<Item> get _asArray => field.expand((element) => element).toList();
+  List<Item> get _asArray => state.field.expand((element) => element).toList();
 }
 
 class GameItem extends StatelessWidget {

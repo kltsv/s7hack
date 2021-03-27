@@ -37,7 +37,7 @@ class _RootState extends State<Root> {
     if (currentCountry != null) {
       final level = currentCountry.currentLevel;
       if (level != null) {
-        di.navigation.openLevel(level);
+        di.navigation.openLevel(level, fromRoot: true);
       }
     }
   }
