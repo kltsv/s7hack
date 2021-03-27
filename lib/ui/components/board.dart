@@ -166,7 +166,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       // на одной вертикальной оси
       final offset = (to ~/ widget.rows) - (from ~/ widget.rows);
       return Offset(0, offset.toDouble());
-    } else if (from ~/ widget.rows == to ~/ widget.rows) {
+    } else if (from ~/ widget.columns == to ~/ widget.columns) {
       // на одной горизонтальной оси
       final offset = (to % widget.columns) - (from % widget.columns);
       return Offset(offset.toDouble(), 0);
@@ -181,6 +181,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       futures.add(_explodeAt(i));
     }
     await Future.wait(futures);
+    for (final i in indexes) {
+      _initExplosion(i);
+    }
     _clearValue(indexes);
     print('Exploded: $indexes');
   }
@@ -201,10 +204,6 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         continue;
       }
       _array[i] = null;
-      _animController.remove(value.id);
-      _tween.remove(value.id);
-      _animation.remove(value.id);
-      _explodeAnimation.remove(value.id);
     }
     setState(() {});
   }
