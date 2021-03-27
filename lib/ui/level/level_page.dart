@@ -3,6 +3,7 @@ import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/ui/components/home_button.dart';
+import 'package:s7hack/ui/level/game_field.dart';
 
 class LevelPage extends StatefulWidget {
   final Level level;
@@ -43,9 +44,7 @@ class _LevelPageState extends State<LevelPage> {
                   if (state == null) {
                     return Container(child: Text('Unknown state'));
                   }
-                  return Container(
-                    child: Center(child: Text(state.stepCount.toString())),
-                  );
+                  return GameField(field: state.field);
                 },
               ),
             ),
