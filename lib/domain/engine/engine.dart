@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:s7hack/domain/engine/datagen.dart';
 import 'package:s7hack/domain/engine/indexer.dart';
+import 'package:s7hack/domain/engine/models/diff.dart';
 import 'package:s7hack/domain/engine/models/game_config.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
 
 import 'differ.dart';
+import 'field_modifier.dart';
 import 'models/index.dart';
 import 'models/item.dart';
 
@@ -21,8 +23,10 @@ import 'models/item.dart';
 /// после каждого хода проверка, возможно ли на данном поле совершить еще один ход - если нет, решафлим поле
 class Engine {
   Engine(GameConfig config) {
-    // TODO state from config
-    _state = _state.copyWith(field: generateField(config.rows, config.columns, _indexer));
+    _state = _state.copyWith(
+      field: generateField(config.rows, config.columns, _indexer),
+      stepCount: 20,
+    );
   }
 
   final _controller = StreamController<GameState>.broadcast();
@@ -61,9 +65,25 @@ class Engine {
     changedField[from.i][from.j] = toItem;
     changedField[to.i][to.j] = fromItem;
 
-    final Set<ItemDiff> collapsingDiff = calcCollapsingDiff(changedField);
+    final Set<ItemDiffExplosion> collapsingDiff =
+        calcCollapsingDiff(changedField);
+    final List<ItemDiffChange> changeDiff = [];
     if (collapsingDiff.isNotEmpty) {
-      /// todo
+      final collapsedField = removeCollapsed(field, collapsingDiff);
+      changeDiff.addAll(calcChangeDiff(collapsedField));
+    }
+    final list = <ItemDiff>[];
+    list.addAll(collapsingDiff);
+    list.addAll(changeDiff);
+
+    final diff = Diff(list);
+    if (diff.diff.isNotEmpty) {
+      _state = _state.copyWith(
+        diff: diff,
+
+        /// todo заполнить дырки в поле
+      );
+      _push();
     }
 
     return collapsingDiff.isNotEmpty;
