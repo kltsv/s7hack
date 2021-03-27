@@ -7,9 +7,24 @@ import 'package:s7hack/ui/components/home_button.dart';
 import 'package:s7hack/ui/level/game_field.dart';
 
 class LevelPage extends StatefulWidget {
+  static Map<String, dynamic> args(Level level, {bool fromRoot = false}) => {
+        'level': level,
+        'fromRoot': fromRoot,
+      };
+
+  static Level parseLevel(Map<String, dynamic> map) => map['level'] as Level;
+
+  static bool parseFromRoot(Map<String, dynamic> map) =>
+      map['fromRoot'] as bool;
+
+  final bool fromRoot;
   final Level level;
 
-  LevelPage({Key? key, required this.level}) : super(key: key);
+  LevelPage({
+    Key? key,
+    required this.level,
+    this.fromRoot = false,
+  }) : super(key: key);
 
   @override
   _LevelPageState createState() => _LevelPageState();
@@ -38,7 +53,8 @@ class _LevelPageState extends State<LevelPage> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              leading: HomeButton(),
+              automaticallyImplyLeading: !widget.fromRoot,
+              actions: [HomeButton()],
               pinned: true,
               title: Text(widget.level.name),
               centerTitle: true,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 
+import '../../app/di.dart';
+
 class LevelItem extends StatelessWidget {
   final Level level;
 
@@ -8,8 +10,11 @@ class LevelItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(level.name),
+    return InkResponse(
+      child: ListTile(
+        title: Text(level.name),
+      ),
+      onTap: () => di.navigation.openLevel(level),
     );
   }
 }

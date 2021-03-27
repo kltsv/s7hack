@@ -3,6 +3,7 @@ import 'package:s7hack/app/navigation/routes.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 
+import '../../ui/level/level_page.dart';
 import '../logger.dart';
 
 class Navigation {
@@ -13,7 +14,10 @@ class Navigation {
   void openCountry(Country country) =>
       _pushNamed(Routes.country, args: country);
 
-  void openLevel(Level level) => _pushNamed(Routes.level, args: level);
+  void openLevel(Level level, {bool fromRoot = false}) => _pushNamed(
+        Routes.level,
+        args: LevelPage.args(level, fromRoot: fromRoot),
+      );
 
   void popToHome() {
     logger.info('Pop home');
