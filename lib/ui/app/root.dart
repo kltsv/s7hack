@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'app.dart';
 import '../../app/di.dart';
 import '../../app/logger.dart';
+import 'app.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -27,6 +27,12 @@ class _RootState extends State<Root> {
     setState(() {
       _initialized = true;
     });
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) => _afterInit());
+  }
+
+  void _afterInit() {
+    di.navigation.openCountry(di.countriesRepo.current);
   }
 
   @override

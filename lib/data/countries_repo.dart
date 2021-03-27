@@ -6,6 +6,8 @@ class CountriesRepo {
   List<Country> _countries = [_iceland]; // mocks
 
   List<Country> get countries => _countries;
+
+  Country get current => _countries[0];
 }
 
 const _iceland = Country(
