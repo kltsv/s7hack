@@ -29,7 +29,7 @@ class _RootState extends State<Root> {
       _initialized = true;
     });
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _afterInit());
+    //WidgetsBinding.instance?.addPostFrameCallback((_) => _afterInit());
   }
 
   void _afterInit() {

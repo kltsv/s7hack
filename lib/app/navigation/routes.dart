@@ -4,6 +4,7 @@ import 'package:s7hack/ui/country/country_page.dart';
 import 'package:s7hack/ui/home/home_page.dart';
 import 'package:s7hack/ui/level/level_page.dart';
 
+import '../../ui/counter/counter_page.dart';
 import '../../ui/level/level_page.dart';
 
 class Routes {
@@ -12,6 +13,7 @@ class Routes {
   static const home = '/';
   static const country = '/country';
   static const level = '/level';
+  static const counter = '/counter';
 
   static final table = <String, Route Function(RouteSettings)>{
     Routes.home: (settings) => _defaultRoute(settings, (context) => HomePage()),
@@ -24,6 +26,8 @@ class Routes {
             fromRoot: LevelPage.parseFromRoot(map),
           );
         }),
+    Routes.counter: (settings) =>
+        _defaultRoute(settings, (context) => CounterPage()),
   };
 
   static Route<T> _defaultRoute<T>(
