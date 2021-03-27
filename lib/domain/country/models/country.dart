@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'level.dart';
+
 part 'country.freezed.dart';
 
 part 'country.g.dart';
@@ -11,6 +13,7 @@ abstract class Country with _$Country {
   const factory Country(
     String id,
     String name,
+    List<Level> levels,
   ) = _Country;
 
   factory Country.fromJson(Map<String, dynamic> json) =>
