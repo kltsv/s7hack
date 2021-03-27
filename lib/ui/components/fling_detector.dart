@@ -23,18 +23,22 @@ class FlingDetector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onHorizontalDragUpdate: (details) {
-      if (details.delta.dx > sensitivity) {
-        onRightSwipe?.call();
-      } else if (details.delta.dx < -sensitivity) {
-        onLeftSwipe?.call();
-      }
-    }, onVerticalDragUpdate: (details) {
-      if (details.delta.dy > sensitivity) {
-        onDownSwipe?.call();
-      } else if (details.delta.dy < -sensitivity) {
-        onUpSwipe?.call();
-      }
-    });
+    return GestureDetector(
+      child: child,
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx > sensitivity) {
+          onRightSwipe?.call();
+        } else if (details.delta.dx < -sensitivity) {
+          onLeftSwipe?.call();
+        }
+      },
+      onVerticalDragUpdate: (details) {
+        if (details.delta.dy > sensitivity) {
+          onDownSwipe?.call();
+        } else if (details.delta.dy < -sensitivity) {
+          onUpSwipe?.call();
+        }
+      },
+    );
   }
 }

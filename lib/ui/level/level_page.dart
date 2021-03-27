@@ -48,13 +48,13 @@ class _LevelPageState extends State<LevelPage> {
             ),
             SliverFillRemaining(
               child: StreamBuilder<GameState>(
-                initialData: _engine.state,
+                initialData: _mockedLevelState,
                 stream: _engine.changes,
                 builder: (context, snapshot) {
                   final state = _mockedLevelState;
-                  /*if (state == null) {
+                  if (state == null) {
                     return Container(child: Text('Unknown state'));
-                  }*/
+                  }
                   return GameField(field: state.field);
                 },
               ),
