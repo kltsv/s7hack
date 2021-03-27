@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/engine/models/index.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_type.dart';
@@ -44,6 +45,10 @@ class GameItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlingDetector(
+      onUpSwipe: () => di.engine.swipe(index, index.up),
+      onDownSwipe: () => di.engine.swipe(index, index.down),
+      onRightSwipe: () => di.engine.swipe(index, index.right),
+      onLeftSwipe: () => di.engine.swipe(index, index.left),
       child: AspectRatio(
         aspectRatio: 1,
         child: Padding(

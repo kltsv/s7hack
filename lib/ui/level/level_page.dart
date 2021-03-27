@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
@@ -21,6 +22,13 @@ class _LevelPageState extends State<LevelPage> {
   void initState() {
     super.initState();
     _engine = Engine(widget.level.initialState);
+    di.engineHolder.engine = _engine;
+  }
+
+  @override
+  void dispose() {
+    di.engineHolder.clear();
+    super.dispose();
   }
 
   @override
