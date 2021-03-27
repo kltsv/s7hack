@@ -13,6 +13,8 @@ enum ItemType {
   auto,
   @JsonValue('diamond')
   diamond,
+  @JsonValue('round')
+  round,
 }
 
 extension ItemTypeAssets on ItemType {
@@ -28,6 +30,8 @@ extension ItemTypeAssets on ItemType {
         return ItemAssets.auto;
       case ItemType.diamond:
         return ItemAssets.diamond;
+      case ItemType.round:
+        return ItemAssets.round;
     }
   }
 }

@@ -16,8 +16,8 @@ List<List<Item>> generateField(int rows, int columns, ItemIndexer indexer) {
       field[i].add(_getRandomItem(
         left: field.getSafe(i)?.getSafe(j - 1),
         top: field.getSafe(i - 1)?.getSafe(j),
-        right: field.getSafe(i)?.getSafe(j + 1),
-        bottom: field.getSafe(i + 1)?.getSafe(j),
+        leftPlOne: field.getSafe(i)?.getSafe(j - 2),
+        topPlOne: field.getSafe(i - 2)?.getSafe(j),
         indexer: indexer,
       ));
     }
@@ -29,25 +29,35 @@ List<List<Item>> generateField(int rows, int columns, ItemIndexer indexer) {
 Item _getRandomItem(
     {Item? left,
     Item? top,
-    Item? right,
-    Item? bottom,
+    Item? leftPlOne,
+    Item? topPlOne,
     required ItemIndexer indexer}) {
-  final values = ItemType.values;
   final Map<ItemType, int> nearby = {};
-  [left, top, right, bottom].forEach((element) {
+  ItemType.values.forEach((element) {
+    nearby[element] = 0;
+  });
+  [left, top, leftPlOne, topPlOne].forEach((element) {
     if (element != null) {
       final int count = nearby[element.type] ?? 0;
       nearby[element.type] = count + 1;
     }
   });
-  ItemType type = values.length < nearby.length
-      ? _getLessMetType(nearby)
-      : values[Random().nextInt(values.length)];
+  ItemType type = _getLessMetType(nearby);
   return Item(indexer.getAndIncrement(), type);
 }
 
 ItemType _getLessMetType(Map<ItemType, int> nearby) {
-  var nearbyList = nearby.entries.toList();
+  final values = ItemType.values;
+  if (nearby.isEmpty) {
+    return values[Random().nextInt(values.length)];
+  }
+
+  final nearbyList = nearby.entries.toList();
   nearbyList.sort((i1, i2) => i1.value.compareTo(i2.value));
-  return nearbyList.first.key;
+  final lessMetType = nearbyList.first;
+  final lessMetTypes = nearbyList
+      .where((element) => element.value <= lessMetType.value)
+      .toList();
+  lessMetTypes.shuffle();
+  return lessMetTypes.first.key;
 }
