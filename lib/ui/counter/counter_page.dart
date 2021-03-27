@@ -39,6 +39,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   final _animation = <int, Animation<Offset>>{};
   final _tween = <int, Tween<Offset>>{};
 
+  final _explodeController = <int, AnimationController>{};
   final _explodeAnimation = <int, Animation<double>>{};
 
   final _array = <int?>[];
@@ -49,6 +50,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     _array.addAll(widget.array);
     for (var i = 0; i < widget.array.length; i++) {
       _initAnim(i);
+      _initExplosion(i);
     }
   }
 
@@ -114,6 +116,20 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     _tween[value] = tween;
   }
 
+  void _initExplosion(int index) {
+    final value = _array[index];
+    if (value == null) {
+      return;
+    }
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    final tween = Tween(begin: 1.0, end: 0.0);
+    final curved = CurveTween(curve: Curves.easeOutBack);
+    final animation = curved.animate(tween.animate(animController));
+    _explodeController[value] = animController;
+    _explodeAnimation[value] = animation;
+  }
+
   Future<void> _swap(int index, AxisDirection direction) async {
     int toIndex;
     switch (direction) {
@@ -171,14 +187,13 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   Future<void> _explode(List<int> indexes) async {
-    print('Explode: $indexes');
     final futures = <Future>[];
     for (final i in indexes) {
       futures.add(_explodeAt(i));
     }
     await Future.wait(futures);
     _clearValue(indexes);
-    print('Exploded');
+    print('Exploded: $indexes');
   }
 
   Future<void> _explodeAt(int index) async {
@@ -186,19 +201,13 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     if (value == null) {
       return;
     }
-    final animController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
-    final tween = Tween(begin: 1.0, end: 0.0);
-    final animation = tween.animate(animController);
-    _explodeAnimation[value] = animation;
 
-    await animController.forward();
+    await _explodeController[value]!.forward();
   }
 
   void _clearValue(List<int> indexes) {
     for (final i in indexes) {
       final value = _array[i];
-      print('LGGR $value');
       if (value == null) {
         continue;
       }
