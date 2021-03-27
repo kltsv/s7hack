@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:s7hack/domain/game/models/item_type.dart';
+
+import 'item_type.dart';
+
 
 part 'item.freezed.dart';
 
