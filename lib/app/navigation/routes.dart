@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/domain/country/models/country.dart';
+import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/ui/country/country_page.dart';
 import 'package:s7hack/ui/home/home_page.dart';
+import 'package:s7hack/ui/level/level_page.dart';
 
 class Routes {
   const Routes._();
 
   static const home = '/';
   static const country = '/country';
+  static const level = '/level';
+
   static final table = <String, Route Function(RouteSettings)>{
     Routes.home: (settings) => _defaultRoute(settings, (context) => HomePage()),
     Routes.country: (settings) => _defaultRoute(settings,
-        (context) => CountryPage(country: settings.arguments as Country))
+        (context) => CountryPage(country: settings.arguments as Country)),
+    Routes.level: (settings) => _defaultRoute(
+        settings, (context) => LevelPage(level: settings.arguments as Level)),
   };
 
   static Route<T> _defaultRoute<T>(

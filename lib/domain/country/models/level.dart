@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'country.dart';
+import 'package:s7hack/domain/engine/models/game_state.dart';
 
 part 'level.freezed.dart';
 
@@ -12,7 +11,15 @@ abstract class Level with _$Level {
 
   const factory Level(
     String name,
+    GameState initialState,
+    LevelStatus status,
   ) = _Level;
 
   factory Level.fromJson(Map<String, dynamic> json) => _$LevelFromJson(json);
+}
+
+enum LevelStatus {
+  unavailable,
+  available,
+  completed,
 }

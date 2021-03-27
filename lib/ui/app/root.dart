@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/domain/country/models/country.dart';
 
 import '../../app/di.dart';
 import '../../app/logger.dart';
@@ -32,7 +33,13 @@ class _RootState extends State<Root> {
   }
 
   void _afterInit() {
-    di.navigation.openCountry(di.countriesRepo.current);
+    final currentCountry = di.countriesRepo.current;
+    if (currentCountry != null) {
+      final level = currentCountry.currentLevel;
+      if (level != null) {
+        di.navigation.openLevel(level);
+      }
+    }
   }
 
   @override

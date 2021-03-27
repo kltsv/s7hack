@@ -9,7 +9,7 @@ part 'game_state.g.dart';
 
 @freezed
 abstract class GameState with _$GameState {
-  static GameState empty = GameState(0, [], Diff.empty);
+  static const empty = GameState(0, [], Diff.empty);
 
   const GameState._();
 

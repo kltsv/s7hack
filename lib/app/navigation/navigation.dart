@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/navigation/routes.dart';
 import 'package:s7hack/domain/country/models/country.dart';
+import 'package:s7hack/domain/country/models/level.dart';
 
 import '../logger.dart';
 
@@ -11,6 +12,8 @@ class Navigation {
 
   void openCountry(Country country) =>
       _pushNamed(Routes.country, args: country);
+
+  void openLevel(Level level) => _pushNamed(Routes.level, args: level);
 
   void popToHome() {
     logger.info('Pop home');

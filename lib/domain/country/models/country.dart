@@ -20,3 +20,10 @@ abstract class Country with _$Country {
   factory Country.fromJson(Map<String, dynamic> json) =>
       _$CountryFromJson(json);
 }
+
+extension CountryX on Country {
+  bool get isCompleted => currentLevel == null;
+
+  Level? get currentLevel => levels
+      .firstWhereOrNull((element) => element.status == LevelStatus.available);
+}
