@@ -5,4 +5,10 @@ enum ItemType {
   plane,
   @JsonValue('bag')
   bag,
+  @JsonValue('shield')
+  shield,
+  @JsonValue('auto')
+  auto,
+  @JsonValue('diamond')
+  diamond,
 }

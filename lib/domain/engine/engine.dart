@@ -59,17 +59,19 @@ class Engine {
 
     final List<ItemDiff> collapsingDiff = _calcCollapsingDiff(changedField);
     if (collapsingDiff.isNotEmpty) {
-      // todo
+      /// todo
     }
 
-    return true; // todo
+    return true; /// todo
   }
 
   List<ItemDiff> _calcCollapsingDiff(List<List<Item>> field) {
     final List<ItemDiff> diffs = [];
     final int columns = field.length;
+    /// todo здесь хрень какая-то
     final int rows = columns > 0 ? (field.getSafe(0)?.length ?? 0) : 0;
 
+    /// todo
     for (var i = 0; i < columns; i++) {
       final List<Item> column = field[i];
       for (var j = 0; j < rows; j++) {
@@ -77,7 +79,7 @@ class Engine {
         final ItemType type = item.type;
         final Index index = Index(i, j);
         final Set<Index> matches = findMatches(field, type, index);
-        // todo
+        /// todo
       }
     }
 

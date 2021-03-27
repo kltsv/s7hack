@@ -13,7 +13,7 @@ Set<Index> findMatches(
 ) {
   final List<Index> matches = [];
 
-  _MatchDirection.values.forEach((element) {
+  MatchDirection.values.forEach((element) {
     matches.addAll(_findMatchesInDirection(field, type, index, element));
   });
 
@@ -23,24 +23,35 @@ Set<Index> findMatches(
 List<Index> _findMatchesInDirection(
   List<List<Item>> field,
   ItemType type,
-  Index index,
-  _MatchDirection direction,
+  Index pointer,
+  MatchDirection direction,
 ) {
   final List<Index> matches = [];
-  matches.add(index);
-  Index pointer = _movePointerToDirection(index, direction);
-  bool canContinueSearch = _canSearchToDirection(field, index, direction);
+  bool canContinueSearch =
+      _canSearchToDirection(field, pointer, direction, _matchesMin - 1);
+  print(
+      "_findMatchesInDirection: start $direction $canContinueSearch $pointer $type");
 
   while (canContinueSearch) {
-    Item nextItem = field[pointer.i][pointer.j];
+    final Item nextItem = field[pointer.i][pointer.j];
     if (nextItem.type == type) {
-      matches.add(Index(pointer.i, pointer.j));
-      pointer = _movePointerToDirection(pointer, direction);
-      canContinueSearch = pointer.i >= 0 && pointer.j >= 0;
+      print(
+          "_findMatchesInDirection: got sovpadenie! $pointer ${matches.length}");
+      matches.add(pointer);
+      pointer = movePointerToDirection(pointer, direction);
+      int matchesMinIndex = _matchesMin - matches.length - 1;
+      if (matchesMinIndex < 0) {
+        matchesMinIndex = 0;
+      }
+      canContinueSearch =
+          _canSearchToDirection(field, pointer, direction, matchesMinIndex);
+      print(
+          "_findMatchesInDirection: got sovpadenie! canContinueSearch=$canContinueSearch matchesMinIndex=$matchesMinIndex");
     } else {
       canContinueSearch = false;
     }
   }
+  print("_findMatchesInDirection: end $direction $matches");
 
   if (matches.length < _matchesMin) {
     matches.clear();
@@ -48,40 +59,40 @@ List<Index> _findMatchesInDirection(
   return matches;
 }
 
-Index _movePointerToDirection(Index pointer, _MatchDirection direction) {
+Index movePointerToDirection(Index pointer, MatchDirection direction) {
   switch (direction) {
-    case _MatchDirection.Left:
+    case MatchDirection.Left:
+      return pointer.copyWith(j: pointer.j - 1);
+    case MatchDirection.Top:
       return pointer.copyWith(i: pointer.i - 1);
-    case _MatchDirection.Top:
-      return pointer.copyWith(i: pointer.j + 1);
-    case _MatchDirection.Right:
+    case MatchDirection.Right:
+      return pointer.copyWith(j: pointer.j + 1);
+    case MatchDirection.Bottom:
       return pointer.copyWith(i: pointer.i + 1);
-    case _MatchDirection.Bottom:
-      return pointer.copyWith(i: pointer.j - 1);
   }
 }
 
 bool _canSearchToDirection(
   List<List<Item>> field,
   Index from,
-  _MatchDirection direction,
+  MatchDirection direction,
+  int matchesMinIndex,
 ) {
-  final int matchesMinIndex = _matchesMin - 1;
   switch (direction) {
-    case _MatchDirection.Left:
-      return from.i >= matchesMinIndex;
-    case _MatchDirection.Top:
+    case MatchDirection.Left:
       return from.j >= matchesMinIndex;
-    case _MatchDirection.Right:
-      final int lastColumnIndex = field.length - 1;
-      return lastColumnIndex - from.i >= matchesMinIndex;
-    case _MatchDirection.Bottom:
-      final int lastRowIndex = field.getSafe(0)?.length ?? 0;
-      return lastRowIndex - from.j >= matchesMinIndex;
+    case MatchDirection.Top:
+      return from.i >= matchesMinIndex;
+    case MatchDirection.Right:
+      final int lastColumnIndex = (field.getSafe(0)?.length ?? 1) - 1;
+      return lastColumnIndex - from.j >= matchesMinIndex;
+    case MatchDirection.Bottom:
+      final int lastRowIndex = field.length - 1;
+      return lastRowIndex - from.i >= matchesMinIndex;
   }
 }
 
-enum _MatchDirection {
+enum MatchDirection {
   Left,
   Top,
   Right,
