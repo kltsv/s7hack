@@ -18,18 +18,6 @@ class CountryUseCase {
 
   Country? get current => _countries.countries[_currentCountryId];
 
-  Future<void> _openLevel(String countryId) async {
-    final country = countries[countryId]!;
-    for (var i = 0; i < country.levels.length; i++) {
-      if (country.levels[i].status == LevelStatus.unavailable) {
-        country.levels[i] =
-            country.levels[i].copyWith(status: LevelStatus.available);
-        break;
-      }
-    }
-    await saveProgress();
-  }
-
   Future<void> addScore(String countryId, int add) async {
     final country = countries[countryId]!;
     _countries.countries[countryId] =
@@ -37,8 +25,10 @@ class CountryUseCase {
     _countries = _countries.copyWith(countries: _countries.countries);
     for (var i = 0; i < country.levels.length; i++) {
       if (country.levels[i].scoreToOpen <
-          _countries.countries[countryId]!.score) {
-        await _openLevel(countryId);
+              _countries.countries[countryId]!.score &&
+          country.levels[i].status != LevelStatus.available) {
+        country.levels[i] =
+            country.levels[i].copyWith(status: LevelStatus.available);
       }
     }
     await saveProgress();
