@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:s7hack/app/di.dart';
 import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/engine/engine.dart';
+import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/domain/engine/models/index.dart';
 import 'package:s7hack/domain/engine/models/item.dart';
 import 'package:s7hack/domain/engine/models/item_diff.dart';
@@ -106,7 +107,10 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       setState(() {});
 
       Future.delayed(Duration(milliseconds: 700));
-      di.engine.sync();
+
+      if (!state.isCompleted) {
+        di.engine.sync();
+      }
     });
   }
 
@@ -229,9 +233,6 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     final fromController = _move(index, toIndex);
     final toController = _move(toIndex, index);
 
-    if (fromController == null || toController == null) {
-      return;
-    }
     logger.info('Start swap: $index, $toIndex');
 
     await Future.wait([
