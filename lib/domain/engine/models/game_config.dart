@@ -6,6 +6,8 @@ part 'game_config.g.dart';
 
 @freezed
 abstract class GameConfig with _$GameConfig {
+  static const empty = GameConfig(0, 0, 0);
+
   const GameConfig._();
 
   const factory GameConfig(
