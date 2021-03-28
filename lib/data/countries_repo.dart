@@ -14,7 +14,8 @@ class CountriesRepo {
 const _iceland = Country(
   'island',
   'Исландия',
-  AppAssets.earthLogo, // TODO replace
+  AppAssets.icelandLogo,
+  AppAssets.icelandBackground,
   [
     Level('Снайфедльс', GameConfig(8, 6), LevelStatus.available),
     Level('Фаградальсфьядль', GameConfig(3, 3), LevelStatus.unavailable),

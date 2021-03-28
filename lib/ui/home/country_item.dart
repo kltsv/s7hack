@@ -12,14 +12,17 @@ class CountryItem extends StatelessWidget {
     return InkResponse(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: Column(
-            children: [
-              Image.asset(
-                country.imageAsset,
-              ),
-              Text(country.name),
-            ],
+        child: GridTile(
+          child: Image.asset(
+            country.imageAsset,
+            fit: BoxFit.contain,
+          ),
+          footer: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              country.name,
+              style: TextStyle(fontSize: 24),
+            ),
           ),
         ),
       ),

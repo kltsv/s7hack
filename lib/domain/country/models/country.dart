@@ -14,6 +14,7 @@ abstract class Country with _$Country {
     String id,
     String name,
     String imageAsset,
+    String backgroundAsset,
     List<Level> levels,
   ) = _Country;
 

@@ -10,12 +10,12 @@ class HomePage extends StatelessWidget {
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(pinned: true),
-          SliverFillRemaining(
-            child: Column(
-                children: di.countriesRepo.countries
-                    .map((country) => CountryItem(country: country))
-                    .toList()),
-          )
+          SliverGrid.count(
+            crossAxisCount: 3,
+            children: di.countriesRepo.countries
+                .map((country) => CountryItem(country: country))
+                .toList(),
+          ),
         ],
       ),
     ));
