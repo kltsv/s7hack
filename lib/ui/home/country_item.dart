@@ -15,7 +15,7 @@ class CountryItem extends StatelessWidget {
         child: GridTile(
           header: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [Text('${country.progress.toInt()}%')],
+            //children: [Text('${country.progress.toInt()}%')],
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0)
