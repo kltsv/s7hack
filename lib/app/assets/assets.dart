@@ -8,6 +8,7 @@ class AppAssets {
   static const sloveniaLogo = 'assets/slovenia.png';
   static const trinidadLogo = 'assets/trinidad.png';
   static const gondurasLogo = 'assets/gonduras.png';
+  static const s7logo = 'assets/s7logo.png';
 
   static const icelandBackground = 'assets/iceland_background.jpeg';
   static const sloveniaBackground = 'assets/slovenia_background.jpg';
