@@ -128,10 +128,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = constraints.smallest;
-        final itemSize = size.width == size.shortestSide
-            ? size.width / columns
-            : size.height / rows;
+        final size = constraints.biggest;
+        final itemSize = size.height == size.longestSide
+            ? size.height / rows
+            : size.width / columns;
+
+        print('LGGR $size, $itemSize');
 
         return CustomScrollView(
           physics: NeverScrollableScrollPhysics(),
@@ -141,6 +143,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
               children: [
                 for (var i = 0; i < _array.length; i++) _buildItem(i, itemSize),
               ],
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: itemSize),
             )
           ],
         );

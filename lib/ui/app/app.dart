@@ -16,9 +16,9 @@ class App extends StatelessWidget {
           // для лендскейпа показываем игру по центру
           return Row(
             children: [
-              Spacer(flex: 2),
-              Expanded(flex: 3, child: child!),
-              Spacer(flex: 2),
+              Spacer(flex: 7),
+              Expanded(flex: 7, child: child!),
+              Spacer(flex: 7),
             ],
           );
         }
