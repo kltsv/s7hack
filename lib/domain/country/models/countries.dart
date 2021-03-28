@@ -8,12 +8,12 @@ part 'countries.g.dart';
 
 @freezed
 abstract class Countries with _$Countries {
-  static const empty = Countries([]);
+  static const empty = Countries({});
 
   const Countries._();
 
   const factory Countries(
-    List<Country> countries,
+    Map<String, Country> countries,
   ) = _Countries;
 
   factory Countries.fromJson(Map<String, dynamic> json) =>

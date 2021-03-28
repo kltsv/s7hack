@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.all(16),
             sliver: SliverGrid.count(
               crossAxisCount: 3,
-              children: di.countryUseCase.countries
+              children: di.countryUseCase.countriesList
                   .map((country) => CountryItem(country: country))
                   .toList(),
             ),

@@ -111,6 +111,11 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       if (!state.isCompleted) {
         di.engine.sync();
       }
+
+      final currentCountry = di.countryUseCase.current;
+      if (currentCountry != null) {
+        di.countryUseCase.addScore(currentCountry.id, state.score);
+      }
     });
   }
 

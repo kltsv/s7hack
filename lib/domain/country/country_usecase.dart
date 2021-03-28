@@ -7,29 +7,66 @@ import 'package:s7hack/domain/engine/models/game_config.dart';
 
 class CountryUseCase {
   static const _countriesKey = 'countries';
+  static const _currentCountryKey = 'currentCountry';
 
+  String? _currentCountryId;
   Countries _countries = Countries.empty;
 
-  List<Country> get countries => _countries.countries;
+  Map<String, Country> get countries => _countries.countries;
 
-  Country? get current => _countries.countries[0];
+  List<Country> get countriesList => _countries.countries.values.toList();
+
+  Country? get current => _countries.countries[_currentCountryId];
+
+  Future<void> _openLevel(String countryId) async {
+    final country = countries[countryId]!;
+    for (var i = 0; i < country.levels.length; i++) {
+      if (country.levels[i].status == LevelStatus.unavailable) {
+        country.levels[i] =
+            country.levels[i].copyWith(status: LevelStatus.available);
+        break;
+      }
+    }
+    await saveProgress();
+  }
+
+  Future<void> addScore(String countryId, int add) async {
+    final country = countries[countryId]!;
+    _countries.countries[countryId] =
+        country.copyWith(score: country.score + add);
+    _countries = _countries.copyWith(countries: _countries.countries);
+    for (var i = 0; i < country.levels.length; i++) {
+      if (country.levels[i].scoreToOpen <
+          _countries.countries[countryId]!.score) {
+        await _openLevel(countryId);
+      }
+    }
+    await saveProgress();
+  }
 
   Future<void> init() async {
     final raw = di.cache.load(_countriesKey);
-    if (raw != null) {
+    final id = di.cache.load(_currentCountryKey);
+    if (raw != null && id != null) {
       _countries = Countries.fromJson(raw);
+      _currentCountryId = id['id'];
     } else {
       // initial data
-      _countries = Countries([_initIceland]);
+      _currentCountryId = _initIceland.id;
+      _countries = Countries({_initIceland.id: _initIceland});
+      await saveProgress();
     }
   }
 
-  Future<void> saveProgress() =>
-      di.cache.save(_countriesKey, _countries.toJson());
+  Future<void> saveProgress() async {
+    await di.cache
+        .save(_currentCountryKey, <String, dynamic>{'id': _currentCountryId});
+    await di.cache.save(_countriesKey, _countries.toJson());
+  }
 }
 
 const _initIceland = Country(
-  'island',
+  'iceland',
   'Исландия',
   AppAssets.icelandLogo,
   AppAssets.icelandBackground,
