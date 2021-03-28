@@ -158,15 +158,12 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
             child: widget,
           )
         : widget;
-    return GestureDetector(
-      onTap: () => _explode([i]),
-      child: FlingDetector(
-        onRightFling: () => _swap(i, AxisDirection.right),
-        onLeftFling: () => _swap(i, AxisDirection.left),
-        onUpFling: () => _swap(i, AxisDirection.up),
-        onDownFling: () => _swap(i, AxisDirection.down),
-        child: widget,
-      ),
+    return FlingDetector(
+      onRightFling: () => _swap(i, AxisDirection.right),
+      onLeftFling: () => _swap(i, AxisDirection.left),
+      onUpFling: () => _swap(i, AxisDirection.up),
+      onDownFling: () => _swap(i, AxisDirection.down),
+      child: widget,
     );
   }
 
