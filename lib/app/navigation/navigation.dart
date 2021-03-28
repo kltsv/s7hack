@@ -20,9 +20,8 @@ class Navigation {
         args: LevelPage.args(level, fromRoot: fromRoot),
       );
 
-  void showDialog(GameState state) {
-
-  }
+  void showCompleteGame(GameState state) =>
+      _pushNamed(Routes.completeGame, args: state);
 
   void popToHome() {
     logger.info('Pop home');
@@ -47,5 +46,4 @@ class Navigation {
     }
     return state;
   }
-
 }

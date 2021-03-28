@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s7hack/domain/country/models/country.dart';
+import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/ui/complete/complete_page.dart';
 import 'package:s7hack/ui/country/country_page.dart';
 import 'package:s7hack/ui/home/home_page.dart';
 import 'package:s7hack/ui/level/level_page.dart';
@@ -14,6 +16,7 @@ class Routes {
   static const country = '/country';
   static const level = '/level';
   static const counter = '/counter';
+  static const completeGame = '/completeGame';
 
   static final table = <String, Route Function(RouteSettings)>{
     Routes.home: (settings) => _defaultRoute(settings, (context) => HomePage()),
@@ -28,6 +31,8 @@ class Routes {
         }),
     Routes.counter: (settings) =>
         _defaultRoute(settings, (context) => CounterPage()),
+    Routes.completeGame: (settings) => _defaultDialogRoute(settings,
+        (context) => CompletePage(state: settings.arguments as GameState)),
   };
 
   static Route<T> _defaultRoute<T>(
@@ -41,6 +46,15 @@ class Routes {
         fullscreenDialog: modal,
       );
 
+  static Route<T> _defaultDialogRoute<T>(
+    RouteSettings routeSettings,
+    WidgetBuilder builder,
+  ) =>
+      DialogRoute<T>(
+        builder: builder,
+        settings: routeSettings,
+      );
+
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final route = Routes.table[settings.name];
     if (route == null) {
@@ -48,4 +62,69 @@ class Routes {
     }
     return route(settings);
   }
+}
+
+class DialogRoute<T> extends PopupRoute<T> {
+  static RoutePageBuilder _defaultPageBuilder(WidgetBuilder builder) =>
+      (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          Builder(builder: builder);
+
+  DialogRoute({
+    required WidgetBuilder builder,
+    bool barrierDismissible = true,
+    String? barrierLabel,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder? transitionBuilder,
+    RouteSettings? settings,
+  })  : _pageBuilder = _defaultPageBuilder(builder),
+        _barrierDismissible = barrierDismissible,
+        _barrierLabel = barrierLabel,
+        _barrierColor = barrierColor,
+        _transitionDuration = transitionDuration,
+        _transitionBuilder = transitionBuilder,
+        super(settings: settings);
+
+  final RoutePageBuilder _pageBuilder;
+
+  @override
+  bool get barrierDismissible => _barrierDismissible;
+  final bool _barrierDismissible;
+
+  @override
+  String? get barrierLabel => _barrierLabel;
+  final String? _barrierLabel;
+
+  @override
+  Color get barrierColor => _barrierColor;
+  final Color _barrierColor;
+
+  @override
+  Duration get transitionDuration => _transitionDuration;
+  final Duration _transitionDuration;
+
+  final RouteTransitionsBuilder? _transitionBuilder;
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return Semantics(
+      child: _pageBuilder(context, animation, secondaryAnimation),
+      scopesRoute: true,
+      explicitChildNodes: true,
+    );
+  }
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) =>
+      _transitionBuilder?.call(context, animation, secondaryAnimation, child) ??
+      FadeTransition(
+          opacity: CurvedAnimation(
+            parent: animation,
+            curve: Curves.linear,
+          ),
+          child: child); // Some default transition
+
 }

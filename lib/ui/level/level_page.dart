@@ -43,14 +43,15 @@ class _LevelPageState extends State<LevelPage> {
     _engine = Engine(widget.level.config);
     di.engineHolder.engine = _engine;
     _subscription = _engine.changes.listen((state) {
-      if(state.isCompleted) {
-        di.navigation.showDialog(state);
+      if (state.isCompleted) {
+        di.navigation.showCompleteGame(state);
       }
     });
   }
 
   @override
   void dispose() {
+    _subscription.cancel();
     di.engineHolder.clear();
     super.dispose();
   }
