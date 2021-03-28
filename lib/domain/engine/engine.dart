@@ -45,8 +45,8 @@ class Engine {
         _state.stepCount > 0 && _performChange(from, to, _state.field);
     if (canSwipe) {
       _state = _state.copyWith(stepCount: _state.stepCount - 1);
+      _push();
     }
-    _push();
     return canSwipe;
   }
 

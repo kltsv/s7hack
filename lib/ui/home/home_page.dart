@@ -9,11 +9,14 @@ class HomePage extends StatelessWidget {
         body: SafeArea(
       child: CustomScrollView(
         slivers: <Widget>[
-          SliverGrid.count(
-            crossAxisCount: 3,
-            children: di.countriesRepo.countries
-                .map((country) => CountryItem(country: country))
-                .toList(),
+          SliverPadding(
+            padding: EdgeInsets.all(16),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              children: di.countriesRepo.countries
+                  .map((country) => CountryItem(country: country))
+                  .toList(),
+            ),
           ),
         ],
       ),
