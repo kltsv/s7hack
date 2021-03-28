@@ -55,6 +55,14 @@ class Engine {
 
   Future<void> dispose() => _controller.close();
 
+  void sync() {
+    final Set<ItemDiffExplosion> collapsingDiff =
+        calcCollapsingDiff(state.field);
+    if (collapsingDiff.isNotEmpty) {
+      _process(state.field, collapsingDiff);
+    }
+  }
+
   bool _performChange(Index from, Index to, List<List<Item>> field) {
     final Item fromItem = field[from.i][from.j];
     final Item toItem = field[to.i][to.j];
@@ -70,6 +78,10 @@ class Engine {
     final Set<ItemDiffExplosion> collapsingDiff =
         calcCollapsingDiff(changedField);
 
+    return _process(changedField, collapsingDiff);
+  }
+
+  bool _process(List<List<Item>> field, Set<ItemDiffExplosion> collapsingDiff) {
     final List<ItemDiffChange> changeDiff = [];
     var collapsedField = <List<Item?>>[];
 
@@ -113,7 +125,6 @@ class Engine {
       );
       _push();
     }
-
     return collapsingDiff.isNotEmpty;
   }
 }

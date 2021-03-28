@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/di.dart';
 import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/index.dart';
@@ -103,6 +104,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       }
 
       setState(() {});
+
+      Future.delayed(Duration(milliseconds: 700));
+      di.engine.sync();
     });
   }
 
@@ -178,7 +182,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initExplosion(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 400), vsync: this);
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));
@@ -188,7 +192,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initCreate(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     final tween = Tween(begin: 0.0, end: 1.0);
     final curved = CurveTween(curve: Curves.ease);
     final animation = curved.animate(tween.animate(animController));
