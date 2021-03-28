@@ -19,6 +19,12 @@ class CountryPage extends StatefulWidget {
 
 class _CountryPageState extends State<CountryPage> {
   @override
+  void initState() {
+    super.initState();
+    di.countryUseCase.updateCurrentCountry(widget.country.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
