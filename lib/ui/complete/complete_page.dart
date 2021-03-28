@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:clipboard/clipboard.dart';
+
 
 class CompletePage extends StatelessWidget {
   final GameState state;
@@ -36,6 +38,23 @@ class CompletePage extends StatelessWidget {
                     ],
                   ),
                 ),
+                GestureDetector(
+                  child: Positioned.fill(
+                      child: Align(
+                        child: Container(
+                          padding: EdgeInsets.all(24),
+                          child: Icon(Icons.share),
+                        ),
+                        alignment: Alignment.topRight,
+                      ),
+                  ),
+                  onTap: () {
+                    FlutterClipboard.copy('Я набрал ${state.score} очков в игре от S7, попробуй и ты: http://bit.ly/s7match3');
+                    final snack = SnackBar(content: Text('Результаты скопированы в буфер обмена'));
+                    ScaffoldMessenger.of(context).showSnackBar(snack);
+                  },
+                ),
+
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.bottomCenter,
