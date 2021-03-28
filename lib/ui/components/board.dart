@@ -146,8 +146,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     widget = _createAnimation[i] != null
         ? ScaleTransition(scale: _createAnimation[i]!, child: widget)
         : widget;
-    widget = value != null && _explodeAnimation[value.id] != null
-        ? ScaleTransition(scale: _explodeAnimation[value.id]!, child: widget)
+    widget = value != null && _explodeAnimation[i] != null
+        ? ScaleTransition(scale: _explodeAnimation[i]!, child: widget)
         : widget;
     widget = value != null && _animation[value.id] != null
         ? SlideTransition(
@@ -182,17 +182,13 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initExplosion(int index) {
-    final value = _array[index];
-    if (value == null) {
-      return;
-    }
     final animController = AnimationController(
         duration: Duration(milliseconds: 2000), vsync: this);
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));
-    _explodeController[value.id] = animController;
-    _explodeAnimation[value.id] = animation;
+    _explodeController[index] = animController;
+    _explodeAnimation[index] = animation;
   }
 
   void _initCreate(int index) {
@@ -315,12 +311,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   Future<void> _explodeAt(int index) async {
-    final value = _array[index];
-    if (value == null) {
-      return;
-    }
-
-    await _explodeController[value.id]!.forward();
+    await _explodeController[index]!.forward();
   }
 
   void _clearValue(List<int> indexes) {
