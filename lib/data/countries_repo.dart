@@ -19,11 +19,11 @@ const _iceland = Country(
   [
     Level('Снайфедльс', GameConfig(8, 6, 20), LevelStatus.available, 0),
     Level(
-        'Фаградальсфьядль', GameConfig(3, 3, 25), LevelStatus.unavailable, 50),
+        'Фаградальсфьядль', GameConfig(3, 3, 25), LevelStatus.unavailable, 70),
     Level(
-        'Эйяфьядлайёкюдль', GameConfig(3, 3, 35), LevelStatus.unavailable, 150),
+        'Эйяфьядлайёкюдль', GameConfig(3, 3, 35), LevelStatus.unavailable, 200),
     Level('Хваннадальсхнукюр', GameConfig(3, 3, 50), LevelStatus.unavailable,
-        500),
+        600),
   ],
   0,
 );

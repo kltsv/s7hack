@@ -61,6 +61,7 @@ class _LevelPageState extends State<LevelPage> {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
               automaticallyImplyLeading: !widget.fromRoot,
@@ -68,6 +69,21 @@ class _LevelPageState extends State<LevelPage> {
               pinned: true,
               title: Text(widget.level.name),
               centerTitle: true,
+            ),
+            SliverToBoxAdapter(
+              child: StreamBuilder<GameState>(
+                  initialData: di.engine.state,
+                  stream: di.engine.changes,
+                  builder: (context, snapshot) {
+                    final data = snapshot.data;
+                    if (data == null) {
+                      return const SizedBox.shrink();
+                    }
+                    return ListTile(
+                      leading: Text('Очков: ${data.score}'),
+                      trailing: Text('Осталось ходов: ${data.stepCount}'),
+                    );
+                  }),
             ),
             SliverFillRemaining(
               child: StreamBuilder<GameState>(

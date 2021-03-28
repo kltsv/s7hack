@@ -46,6 +46,7 @@ class Engine {
     if (canSwipe) {
       _state = _state.copyWith(stepCount: _state.stepCount - 1);
     }
+    _push();
     return canSwipe;
   }
 
@@ -59,7 +60,9 @@ class Engine {
     final Set<ItemDiffExplosion> collapsingDiff =
         calcCollapsingDiff(state.field);
     if (collapsingDiff.isNotEmpty) {
+      _state = _state.copyWith(score: _state.score + collapsingDiff.length);
       _process(state.field, collapsingDiff);
+      _push();
     }
   }
 
@@ -78,16 +81,18 @@ class Engine {
     final Set<ItemDiffExplosion> collapsingDiff =
         calcCollapsingDiff(changedField);
 
-    return _process(changedField, collapsingDiff);
-  }
-
-  bool _process(List<List<Item>> field, Set<ItemDiffExplosion> collapsingDiff) {
-    final List<ItemDiffChange> changeDiff = [];
-    var collapsedField = <List<Item?>>[];
-
     if (collapsingDiff.isEmpty) {
       return false;
     }
+    _state = _state.copyWith(score: _state.score + collapsingDiff.length);
+
+    _process(changedField, collapsingDiff);
+    return true;
+  }
+
+  void _process(List<List<Item>> field, Set<ItemDiffExplosion> collapsingDiff) {
+    final List<ItemDiffChange> changeDiff = [];
+    var collapsedField = <List<Item?>>[];
 
     collapsedField = removeCollapsed(field, collapsingDiff);
 
@@ -123,9 +128,7 @@ class Engine {
         diff: diff,
         field: fieldUpdate,
       );
-      _push();
     }
-    return collapsingDiff.isNotEmpty;
   }
 }
 
