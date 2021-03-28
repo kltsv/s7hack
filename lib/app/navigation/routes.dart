@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/navigation/fade_route.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:s7hack/ui/complete/complete_page.dart';
@@ -22,13 +23,30 @@ class Routes {
     Routes.home: (settings) => _defaultRoute(settings, (context) => HomePage()),
     Routes.country: (settings) => _defaultRoute(settings,
         (context) => CountryPage(country: settings.arguments as Country)),
-    Routes.level: (settings) => _defaultRoute(settings, (context) {
+    Routes.level: (settings) {
+      var startedFromRoot = false;
+      if (settings.arguments is Map<String, dynamic>) {
+        final map = settings.arguments as Map<String, dynamic>;
+        startedFromRoot = LevelPage.parseFromRoot(map);
+      }
+      if (startedFromRoot) {
+        return _fadeRoute(settings, (context) {
           final map = settings.arguments as Map<String, dynamic>;
           return LevelPage(
             level: LevelPage.parseLevel(map),
             fromRoot: LevelPage.parseFromRoot(map),
           );
-        }),
+        });
+      } else {
+        return _defaultRoute(settings, (context) {
+          final map = settings.arguments as Map<String, dynamic>;
+          return LevelPage(
+            level: LevelPage.parseLevel(map),
+            fromRoot: LevelPage.parseFromRoot(map),
+          );
+        });
+      }
+    },
     Routes.counter: (settings) =>
         _defaultRoute(settings, (context) => CounterPage()),
     Routes.completeGame: (settings) => _defaultDialogRoute(settings,
@@ -51,6 +69,15 @@ class Routes {
     WidgetBuilder builder,
   ) =>
       DialogRoute<T>(
+        builder: builder,
+        settings: routeSettings,
+      );
+
+  static Route<T> _fadeRoute<T>(
+    RouteSettings routeSettings,
+    WidgetBuilder builder,
+  ) =>
+      FadePageRoute<T>(
         builder: builder,
         settings: routeSettings,
       );

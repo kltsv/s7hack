@@ -65,8 +65,7 @@ class _LevelPageState extends State<LevelPage> {
           slivers: [
             SliverAppBar(
               automaticallyImplyLeading: !widget.fromRoot,
-              leading: widget.fromRoot ? HomeButton() : null,
-              actions: widget.fromRoot ? null : [HomeButton()],
+              actions: [HomeButton()],
               pinned: true,
               backgroundColor: Colors.transparent,
               textTheme: Theme.of(context).textTheme.copyWith(
