@@ -80,6 +80,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
         }
       }
       await Future.wait(futures);
+      for (final change in changes) {
+        _initAnim(change.from.as1D(columns));
+      }
 
       final futureCreates = <Future>[];
       for (final create in creates) {
@@ -95,6 +98,10 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       _updateArray();
 
       await Future.wait(futureCreates);
+
+      for (final create in creates) {
+        _clearCreate(create.as1D(columns));
+      }
 
       setState(() {});
     });
@@ -196,6 +203,11 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     final animation = curved.animate(tween.animate(animController));
     _createController[index] = animController;
     _createAnimation[index] = animation;
+  }
+
+  void _clearCreate(int index) {
+    _createController.remove(index);
+    _createAnimation.remove(index);
   }
 
   Future<void> _swap(int index, AxisDirection direction) async {
