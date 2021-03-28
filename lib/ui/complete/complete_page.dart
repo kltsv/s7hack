@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:s7hack/app/assets/assets.dart';
 import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/country.dart';
-import 'package:s7hack/domain/engine/models/game_state.dart';
 import 'package:clipboard/clipboard.dart';
+import 'package:s7hack/ui/complete/complete_args.dart';
 
 
 class CompletePage extends StatelessWidget {
-  final GameState state;
+  final CompleteArgs args;
 
-  const CompletePage({Key? key, required this.state}) : super(key: key);
-
+  const CompletePage({Key? key, required this.args}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,6 +26,12 @@ class CompletePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(AppAssets.viking),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 24),
+                        child: Text("Открыта статья \"${args.level.description}\"!", style: Theme.of(context)
+                            .textTheme
+                            .subtitle2),
+                      ),
                       Text(
                         'Заработано очков',
                         textAlign: TextAlign.center,
@@ -35,7 +40,7 @@ class CompletePage extends StatelessWidget {
                             .bodyText2
                             ?.copyWith(fontSize: 16),
                       ),
-                      Text('${state.score}',
+                      Text('${args.gameState.score}',
                           style: Theme.of(context).textTheme.headline4),
                     ],
                   ),
@@ -44,19 +49,18 @@ class CompletePage extends StatelessWidget {
                   child: Positioned.fill(
                       child: Align(
                         child: Container(
-                          padding: EdgeInsets.all(24),
+                          padding: EdgeInsets.all(36),
                           child: Icon(Icons.share),
                         ),
                         alignment: Alignment.topRight,
                       ),
                   ),
                   onTap: () {
-                    FlutterClipboard.copy('Я набрал ${state.score} очков в игре от S7, попробуй и ты: http://bit.ly/s7match3');
+                    FlutterClipboard.copy('Я набрал ${args.gameState.score} очков в игре от S7, попробуй и ты: http://bit.ly/s7match3');
                     final snack = SnackBar(content: Text('Результаты скопированы в буфер обмена'));
                     ScaffoldMessenger.of(context).showSnackBar(snack);
                   },
                 ),
-
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.bottomCenter,
