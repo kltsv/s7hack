@@ -178,7 +178,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initAnim(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 150), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
     _animController[index] = animController;
