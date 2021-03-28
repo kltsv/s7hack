@@ -41,7 +41,7 @@ List<ItemDiffChange> calcChangeDiff(List<List<Item?>> collapsedField) {
           final from = Index(k, j);
           if (upperItem != null && !diff.any((e) => e.from == from)) {
             final to = Index(i, j);
-            diff.add(ItemDiffChange(from, to));
+            diff.add(ItemDiffChange(from, to, upperItem));
           }
           k--;
         } while (upperItem == null && k >= 0);
@@ -52,8 +52,10 @@ List<ItemDiffChange> calcChangeDiff(List<List<Item?>> collapsedField) {
   return diff;
 }
 
-List<ItemDiffChange> newCalcChangeDiff(List<List<Item?>> collapsedField) {
+MapEntry<List<ItemDiffChange>, Set<Index>> newCalcChangeDiff(
+    List<List<Item?>> collapsedField) {
   final diff = <ItemDiffChange>[];
+  final empty = <Index>{};
   final columns = collapsedField[0].length;
 
   for (var j = 0; j < columns; j++) {
@@ -70,12 +72,15 @@ List<ItemDiffChange> newCalcChangeDiff(List<List<Item?>> collapsedField) {
       for (var i = 0; i < collapsedField.length; i++) {
         final item = collapsedField[i][j];
         if (item != null && i < lowest) {
-          diff.add(ItemDiffChange(Index(i, j), Index(i + counter, j)));
+          diff.add(ItemDiffChange(Index(i, j), Index(i + counter, j), item));
           print('LGGR ${diff.last}');
         }
       }
     }
+    for (var k = 0; k < counter; k++) {
+      empty.add(Index(k, j));
+    }
   }
 
-  return diff;
+  return MapEntry(diff, empty);
 }

@@ -83,6 +83,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       for (final change in changes) {
         _initAnim(change.from.as1D(columns));
       }
+      setState(() {});
 
       final futureCreates = <Future>[];
       for (final create in creates) {
@@ -92,7 +93,6 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
           futureCreates.add(controller.forward());
         }
       }
-
       setState(() {});
 
       _updateArray();
@@ -331,7 +331,6 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       }
       _array[i] = null;
     }
-    setState(() {});
   }
 }
 

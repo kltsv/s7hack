@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:s7hack/domain/engine/datagen.dart';
 import 'package:s7hack/domain/engine/indexer.dart';
@@ -78,20 +77,30 @@ class Engine {
     }
 
     collapsedField = removeCollapsed(field, collapsingDiff);
-    changeDiff.addAll(newCalcChangeDiff(collapsedField));
+
+    final fieldUpdate = _state.field;
+
+    for (var i = 0; i < collapsedField.length; i++) {
+      for (var j = 0; j < collapsedField[i].length; j++) {
+        if (collapsedField[i][j] == null) {
+          fieldUpdate[i][j] = _generateRandomItem(_indexer);
+        }
+      }
+    }
+
+    final entry = newCalcChangeDiff(collapsedField);
+    changeDiff.addAll(entry.key);
 
     final list = <ItemDiff>[];
 
     list.addAll(collapsingDiff);
     list.addAll(changeDiff);
 
-    final fieldUpdate = state.field;
     changeDiff.forEach((change) {
-      fieldUpdate[change.to.i][change.to.j] =
-          fieldUpdate[change.from.i][change.from.j];
+      fieldUpdate[change.to.i][change.to.j] = change.item;
     });
 
-    changeDiff.map((e) => e.from).forEach((element) {
+    entry.value.forEach((element) {
       fieldUpdate[element.i][element.j] = _generateRandomItem(_indexer);
     });
 
@@ -108,5 +117,6 @@ class Engine {
   }
 }
 
-Item _generateRandomItem(ItemIndexer indexer) => Item(indexer.getAndIncrement(),
-    ItemType.values[Random().nextInt(ItemType.values.length)]);
+Item _generateRandomItem(ItemIndexer indexer) =>
+    Item(indexer.getAndIncrement(), ItemType.plane
+        /*ItemType.values[Random().nextInt(ItemType.values.length)]*/);
