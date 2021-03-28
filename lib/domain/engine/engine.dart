@@ -69,29 +69,37 @@ class Engine {
 
     final Set<ItemDiffExplosion> collapsingDiff =
         calcCollapsingDiff(changedField);
-    final createDiff = <ItemDiffCreate>[];
+
     final List<ItemDiffChange> changeDiff = [];
     var collapsedField = <List<Item?>>[];
-    if (collapsingDiff.isNotEmpty) {
-      collapsedField = removeCollapsed(field, collapsingDiff);
-      changeDiff.addAll(newCalcChangeDiff(collapsedField));
 
-      changeDiff.map((e) => e.from).forEach((element) {
-        final newItem = _generateRandomItem(_indexer);
-        createDiff.add(ItemDiffCreate(element, newItem));
-      });
+    if (collapsingDiff.isEmpty) {
+      return false;
     }
 
+    collapsedField = removeCollapsed(field, collapsingDiff);
+    changeDiff.addAll(newCalcChangeDiff(collapsedField));
+
     final list = <ItemDiff>[];
+
     list.addAll(collapsingDiff);
     list.addAll(changeDiff);
-    list.addAll(createDiff);
+
+    final fieldUpdate = state.field;
+    changeDiff.forEach((change) {
+      fieldUpdate[change.to.i][change.to.j] =
+          fieldUpdate[change.from.i][change.from.j];
+    });
+
+    changeDiff.map((e) => e.from).forEach((element) {
+      fieldUpdate[element.i][element.j] = _generateRandomItem(_indexer);
+    });
 
     final diff = Diff(list);
     if (diff.diff.isNotEmpty) {
       _state = _state.copyWith(
         diff: diff,
-        // TODO добавить новые
+        field: fieldUpdate,
       );
       _push();
     }

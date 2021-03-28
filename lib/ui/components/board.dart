@@ -66,7 +66,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     _subscription = _engine.changes.listen((state) async {
       final explosions = state.diff.diff.whereType<ItemDiffExplosion>();
       final changes = state.diff.diff.whereType<ItemDiffChange>();
-      final creates = state.diff.diff.whereType<ItemDiffCreate>();
+      final creates =
+          state.diff.diff.whereType<ItemDiffChange>().map((e) => e.from);
 
       await _explode(explosions.map((e) => e.index.as1D(columns)).toList());
 
@@ -82,9 +83,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
       final futureCreates = <Future>[];
       for (final create in creates) {
-        final controller = _createController[create.index];
+        final controller = _createController[create];
         if (controller != null) {
-          _initCreate(create.index.as1D(columns));
+          _initCreate(create.as1D(columns));
           futureCreates.add(controller.forward());
         }
       }
@@ -164,8 +165,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     if (value == null) {
       return;
     }
-    final animController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    final animController = AnimationController(
+        duration: Duration(milliseconds: 2000), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
     _animController[value.id] = animController;
@@ -178,8 +179,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     if (value == null) {
       return;
     }
-    final animController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    final animController = AnimationController(
+        duration: Duration(milliseconds: 2000), vsync: this);
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));

@@ -58,17 +58,20 @@ List<ItemDiffChange> newCalcChangeDiff(List<List<Item?>> collapsedField) {
 
   for (var j = 0; j < columns; j++) {
     int counter = 0;
+    int lowest = 0;
     for (var i = 0; i < collapsedField.length; i++) {
       final item = collapsedField[i][j];
       if (item == null) {
         counter++;
+        lowest = i;
       }
     }
     if (counter > 0) {
       for (var i = 0; i < collapsedField.length; i++) {
         final item = collapsedField[i][j];
-        if (item != null) {
+        if (item != null && i < lowest) {
           diff.add(ItemDiffChange(Index(i, j), Index(i + counter, j)));
+          print('LGGR ${diff.last}');
         }
       }
     }
