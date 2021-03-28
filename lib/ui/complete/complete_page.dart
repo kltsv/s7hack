@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/assets/assets.dart';
 import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
@@ -25,6 +26,7 @@ class CompletePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Image.asset(AppAssets.viking),
                       Text(
                         'Заработано очков',
                         textAlign: TextAlign.center,
