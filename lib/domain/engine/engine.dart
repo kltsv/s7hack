@@ -27,7 +27,7 @@ class Engine {
   Engine(GameConfig config) {
     _state = _state.copyWith(
       field: generateField(config.rows, config.columns, _indexer),
-      stepCount: 20,
+      stepCount: config.steps,
     );
   }
 

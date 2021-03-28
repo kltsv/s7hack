@@ -11,6 +11,7 @@ abstract class GameConfig with _$GameConfig {
   const factory GameConfig(
     int rows,
     int columns,
+    int steps,
   ) = _GameConfig;
 
   factory GameConfig.fromJson(Map<String, dynamic> json) =>

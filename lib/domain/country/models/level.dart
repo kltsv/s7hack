@@ -13,6 +13,7 @@ abstract class Level with _$Level {
     String name,
     GameConfig config,
     LevelStatus status,
+    int scoreToOpen,
   ) = _Level;
 
   factory Level.fromJson(Map<String, dynamic> json) => _$LevelFromJson(json);

@@ -16,6 +16,7 @@ abstract class Country with _$Country {
     String imageAsset,
     String backgroundAsset,
     List<Level> levels,
+    int score,
   ) = _Country;
 
   factory Country.fromJson(Map<String, dynamic> json) =>

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s7hack/app/navigation/routes.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
+import 'package:s7hack/domain/engine/models/game_state.dart';
 
 import '../../ui/level/level_page.dart';
 import '../logger.dart';
@@ -18,6 +19,10 @@ class Navigation {
         Routes.level,
         args: LevelPage.args(level, fromRoot: fromRoot),
       );
+
+  void showDialog(GameState state) {
+
+  }
 
   void popToHome() {
     logger.info('Pop home');
@@ -42,4 +47,5 @@ class Navigation {
     }
     return state;
   }
+
 }

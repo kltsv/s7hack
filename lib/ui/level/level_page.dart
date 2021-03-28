@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/level.dart';
@@ -33,11 +35,18 @@ class LevelPage extends StatefulWidget {
 class _LevelPageState extends State<LevelPage> {
   late final Engine _engine;
 
+  late final StreamSubscription _subscription;
+
   @override
   void initState() {
     super.initState();
     _engine = Engine(widget.level.config);
     di.engineHolder.engine = _engine;
+    _subscription = _engine.changes.listen((state) {
+      if(state.isCompleted) {
+        di.navigation.showDialog(state);
+      }
+    });
   }
 
   @override
