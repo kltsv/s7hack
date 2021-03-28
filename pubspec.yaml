@@ -36,5 +36,11 @@ flutter:
     - assets/diamond.png
     - assets/round.png
     - assets/iceland.png
-    - assets/iceland_background.jpeg
+    - assets/slovenia.png
+    - assets/trinidad.png
+    - assets/gonduras.png
     - assets/fastest.png
+    - assets/iceland_background.jpeg
+    - assets/slovenia_background.jpg
+    - assets/trinidad_background.jpg
+    - assets/gonduras_background.jpg
