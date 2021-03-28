@@ -10,6 +10,18 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: AppAssets.appName,
       builder: (context, child) {
+        final size = MediaQuery.of(context).size;
+        print('size: $size');
+        if (size.width > size.height) {
+          // для лендскейпа показываем игру по центру
+          return Row(
+            children: [
+              Spacer(flex: 2),
+              Expanded(flex: 3, child: child!),
+              Spacer(flex: 2),
+            ],
+          );
+        }
         return child!;
       },
       theme: ThemeData(

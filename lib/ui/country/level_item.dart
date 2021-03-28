@@ -56,7 +56,7 @@ class LevelItem extends StatelessWidget {
                               : Colors.black26,
                         ),
                   ),
-            trailing: levelStatus == LevelStatus.available
+            trailing: levelStatus != LevelStatus.unavailable
                 ? IconButton(
                     icon: Icon(
                       Icons.play_arrow,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/navigation/fade_route.dart';
 import 'package:s7hack/domain/country/models/country.dart';
@@ -57,12 +58,17 @@ class Routes {
     RouteSettings routeSettings,
     WidgetBuilder builder, {
     bool modal = false,
-  }) =>
-      MaterialPageRoute<T>(
+  }) {
+    if (kIsWeb) {
+      return _fadeRoute(routeSettings, builder);
+    } else {
+      return MaterialPageRoute<T>(
         settings: routeSettings,
         builder: builder,
         fullscreenDialog: modal,
       );
+    }
+  }
 
   static Route<T> _defaultDialogRoute<T>(
     RouteSettings routeSettings,
