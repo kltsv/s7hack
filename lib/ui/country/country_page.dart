@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:s7hack/app/assets/assets.dart';
+import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/ui/components/home_button.dart';
 import 'package:s7hack/ui/country/level_item.dart';
@@ -55,13 +57,22 @@ class _CountryPageState extends State<CountryPage> {
               ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 8)),
-            SliverFillRemaining(
+            SliverToBoxAdapter(
               child: Column(
                   children: widget.country.levels
                       .map((level) =>
                           LevelItem(countryId: widget.country.id, level: level))
                       .toList()),
-            )
+            ),
+            SliverToBoxAdapter(child: SizedBox(height: 12)),
+            SliverToBoxAdapter(
+              child: InkResponse(
+                  child: Image.asset(AppAssets.ticket),
+                  onTap: () => di.navigation.openLink(AppAssets.s7Url)),
+            ),
+            SliverToBoxAdapter(
+              child: Image.asset(AppAssets.ticket),
+            ),
           ],
         ),
       ),

@@ -24,9 +24,9 @@ abstract class Level with _$Level {
 extension LevelX on Level {
   LevelStatus status(int currentScore) => currentScore < scoreToOpen
       ? LevelStatus.unavailable
-      : currentScore < scoreToDone
-          ? LevelStatus.available
-          : LevelStatus.completed;
+      : currentScore >= scoreToDone
+          ? LevelStatus.completed
+          : LevelStatus.available;
 }
 
 enum LevelStatus {
