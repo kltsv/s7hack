@@ -1,17 +1,34 @@
 import 'package:s7hack/app/assets/assets.dart';
+import 'package:s7hack/app/di.dart';
+import 'package:s7hack/domain/country/models/countries.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/models/game_config.dart';
 
-class CountriesRepo {
-  List<Country> _countries = [_iceland]; // mocks
+class CountryUseCase {
+  static const _countriesKey = 'countries';
 
-  List<Country> get countries => _countries;
+  Countries _countries = Countries.empty;
 
-  Country? get current => _countries[0];
+  List<Country> get countries => _countries.countries;
+
+  Country? get current => _countries.countries[0];
+
+  Future<void> init() async {
+    final raw = di.cache.load(_countriesKey);
+    if (raw != null) {
+      _countries = Countries.fromJson(raw);
+    } else {
+      // initial data
+      _countries = Countries([_initIceland]);
+    }
+  }
+
+  Future<void> saveProgress() =>
+      di.cache.save(_countriesKey, _countries.toJson());
 }
 
-const _iceland = Country(
+const _initIceland = Country(
   'island',
   'Исландия',
   AppAssets.icelandLogo,

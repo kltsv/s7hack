@@ -23,6 +23,7 @@ class _RootState extends State<Root> {
     logger.info('Initializing');
 
     await di.cache.init();
+    await di.countryUseCase.init();
 
     logger.info('Initialized');
     setState(() {
@@ -33,7 +34,7 @@ class _RootState extends State<Root> {
   }
 
   void _afterInit() {
-    final currentCountry = di.countriesRepo.current;
+    final currentCountry = di.countryUseCase.current;
     if (currentCountry != null) {
       final level = currentCountry.currentLevel;
       if (level != null) {
