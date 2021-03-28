@@ -1,5 +1,7 @@
 # s7hack
 
+[Demo](http://bit.ly/s7match3)
+
 Moscow Hack 2021 S7
 
 Игра три-в-ряд, встроенная в основное приложение S7.
