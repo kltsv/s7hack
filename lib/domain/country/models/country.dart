@@ -32,7 +32,7 @@ extension CountryX on Country {
   bool get isCompleted => currentLevel.name == levels.last.name;
 
   Level get currentLevel =>
-      levels.lastWhereOrNull(
+      levels.firstWhereOrNull(
           (element) => element.status(score) == LevelStatus.available) ??
       levels.last;
 }

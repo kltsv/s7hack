@@ -16,10 +16,16 @@ class Navigation {
   void openCountry(Country country) =>
       _pushNamed(Routes.country, args: country);
 
-  void openLevel(Level level, {bool fromRoot = false}) => _pushNamed(
-        Routes.level,
-        args: LevelPage.args(level, fromRoot: fromRoot),
-      );
+  void openLevel(Level level, {bool fromRoot = false, bool replace = false}) =>
+      replace
+          ? _replaceNamed(
+              Routes.level,
+              args: LevelPage.args(level, fromRoot: fromRoot),
+            )
+          : _pushNamed(
+              Routes.level,
+              args: LevelPage.args(level, fromRoot: fromRoot),
+            );
 
   void showCompleteGame(GameState state) =>
       _pushNamed(Routes.completeGame, args: state);
@@ -29,14 +35,23 @@ class Navigation {
     _state?.popUntil((route) => route.isFirst);
   }
 
-  Future<void> openLink(String url) => launch(url);
+  Future<void> openLink(String url) async {
+    if (await canLaunch(url)) {
+      launch(url);
+    }
+  }
 
   void _pushNamed(String route, {Object? args}) {
     logger.info('Push route: $route${args != null ? ', $args' : ''}');
     _state?.pushNamed(route, arguments: args);
   }
 
-  void _pop() {
+  void _replaceNamed(String route, {Object? args}) {
+    logger.info('Replace route: $route${args != null ? ', $args' : ''}');
+    _state?.pushReplacementNamed(route, arguments: args);
+  }
+
+  void pop() {
     logger.info('Pop route');
     _state?.pop();
   }

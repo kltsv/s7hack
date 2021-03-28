@@ -58,7 +58,7 @@ const _initIceland = Country(
     Level(
       'Снайфедльс',
       'Оформить визу',
-      GameConfig(7, 5, 20),
+      GameConfig(7, 5, 5),
       0,
       100,
       'https://официальный-визовый-центр.москва/blog/kak-oformit-vizu-v-islandiyu-v-moskve-poshagovaya-instruktsiya/',
