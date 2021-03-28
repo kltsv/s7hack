@@ -23,6 +23,7 @@ class _CountryPageState extends State<CountryPage> {
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              automaticallyImplyLeading: false,
               actions: [const HomeButton()],
               expandedHeight: 200,
               backgroundColor: Colors.transparent,
@@ -35,12 +36,13 @@ class _CountryPageState extends State<CountryPage> {
                         .headline6
                         ?.copyWith(color: Colors.white),
                   ),
-                  trailing: Text(
-                    '${widget.country.progress.round()}%',
+                  subtitle: Text(
+                    'Очков: ${widget.country.score}${widget.country.progress.round() == 0 ? ''
+                        '' : ' (${widget.country.progress.round()}%)'}',
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
-                        ?.copyWith(color: Colors.white),
+                        .bodyText1
+                        ?.copyWith(color: Colors.white70, fontSize: 10),
                   ),
                 ),
                 background: Container(

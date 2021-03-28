@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'level.dart';
@@ -24,8 +26,8 @@ abstract class Country with _$Country {
 }
 
 extension CountryX on Country {
-  double get progress =>
-      ((score / levels.last.scoreToOpen) * 100).round().floorToDouble();
+  double get progress => min(
+      100, ((score / levels.last.scoreToOpen) * 100).round().floorToDouble());
 
   bool get isCompleted => currentLevel.name == levels.last.name;
 
