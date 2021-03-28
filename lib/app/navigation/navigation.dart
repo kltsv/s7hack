@@ -3,6 +3,7 @@ import 'package:s7hack/app/navigation/routes.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/level/level_page.dart';
 import '../logger.dart';
@@ -27,6 +28,8 @@ class Navigation {
     logger.info('Pop home');
     _state?.popUntil((route) => route.isFirst);
   }
+
+  Future<void> openLink(String url) => launch(url);
 
   void _pushNamed(String route, {Object? args}) {
     logger.info('Push route: $route${args != null ? ', $args' : ''}');

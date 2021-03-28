@@ -11,9 +11,11 @@ abstract class Level with _$Level {
 
   const factory Level(
     String name,
+    String description,
     GameConfig config,
     LevelStatus status,
     int scoreToOpen,
+    String bonusUrl,
   ) = _Level;
 
   factory Level.fromJson(Map<String, dynamic> json) => _$LevelFromJson(json);
