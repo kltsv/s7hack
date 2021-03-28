@@ -66,6 +66,10 @@ class Engine {
     }
   }
 
+  void refreshField() {
+
+  }
+
   bool _performChange(Index from, Index to, List<List<Item>> field) {
     final Item fromItem = field[from.i][from.j];
     final Item toItem = field[to.i][to.j];
