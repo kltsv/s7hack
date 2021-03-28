@@ -106,7 +106,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
       setState(() {});
 
-      Future.delayed(Duration(milliseconds: 700));
+      Future.delayed(Duration(milliseconds: 500));
 
       if (!state.isCompleted) {
         di.engine.sync();
@@ -178,7 +178,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initAnim(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 150), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
     _animController[index] = animController;
@@ -188,7 +188,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initExplosion(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 400), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));
@@ -198,7 +198,7 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
   void _initCreate(int index) {
     final animController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 400), vsync: this);
     final tween = Tween(begin: 0.0, end: 1.0);
     final curved = CurveTween(curve: Curves.ease);
     final animation = curved.animate(tween.animate(animController));

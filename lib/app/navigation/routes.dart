@@ -71,6 +71,7 @@ class Routes {
       DialogRoute<T>(
         builder: builder,
         settings: routeSettings,
+        barrierDismissible: false,
       );
 
   static Route<T> _fadeRoute<T>(

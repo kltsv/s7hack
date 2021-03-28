@@ -1,5 +1,6 @@
 import 'package:s7hack/app/assets/assets.dart';
 import 'package:s7hack/app/di.dart';
+import 'package:s7hack/app/logger.dart';
 import 'package:s7hack/domain/country/models/countries.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
@@ -23,14 +24,7 @@ class CountryUseCase {
     _countries.countries[countryId] =
         country.copyWith(score: country.score + add);
     _countries = _countries.copyWith(countries: _countries.countries);
-    for (var i = 0; i < country.levels.length; i++) {
-      if (country.levels[i].scoreToOpen <
-              _countries.countries[countryId]!.score &&
-          country.levels[i].status != LevelStatus.available) {
-        country.levels[i] =
-            country.levels[i].copyWith(status: LevelStatus.available);
-      }
-    }
+    logger.info('Add score: $add, total: ${country.score + add}');
     await saveProgress();
   }
 
@@ -65,32 +59,32 @@ const _initIceland = Country(
       'Снайфедльс',
       'Оформить визу',
       GameConfig(7, 5, 20),
-      LevelStatus.available,
       0,
+      100,
       'https://официальный-визовый-центр.москва/blog/kak-oformit-vizu-v-islandiyu-v-moskve-poshagovaya-instruktsiya/',
     ),
     Level(
       'Фаградальсфьядль',
       'Учесть некоторые вещи к поездке',
       GameConfig(7, 5, 30),
-      LevelStatus.unavailable,
       100,
+      300,
       'https://mishka.travel/blog/index/node/id/3330-puteshestvie-v-islandiyu-jile-avia-avto/',
     ),
     Level(
       'Эйяфьядлайёкюдль',
       'Выбрать достопримечательности',
       GameConfig(7, 6, 40),
-      LevelStatus.unavailable,
       300,
+      600,
       'https://www.onetwotrip.com/ru/blog/iceland/6-reasons-go-to-iceland/',
     ),
     Level(
       'Хваннадальсхнукюр',
       'Подобрать инстаграммные ракурсы',
       GameConfig(8, 6, 50),
-      LevelStatus.unavailable,
       600,
+      1000,
       'https://www.instagram.com/explore/tags/исландия/',
     ),
   ],

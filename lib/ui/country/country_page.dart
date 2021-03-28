@@ -52,10 +52,12 @@ class _CountryPageState extends State<CountryPage> {
                 ),
               ),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 8)),
             SliverFillRemaining(
               child: Column(
                   children: widget.country.levels
-                      .map((level) => LevelItem(level))
+                      .map((level) =>
+                          LevelItem(countryId: widget.country.id, level: level))
                       .toList()),
             )
           ],

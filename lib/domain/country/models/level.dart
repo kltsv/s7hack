@@ -13,12 +13,20 @@ abstract class Level with _$Level {
     String name,
     String description,
     GameConfig config,
-    LevelStatus status,
     int scoreToOpen,
+    int scoreToDone,
     String bonusUrl,
   ) = _Level;
 
   factory Level.fromJson(Map<String, dynamic> json) => _$LevelFromJson(json);
+}
+
+extension LevelX on Level {
+  LevelStatus status(int currentScore) => currentScore < scoreToOpen
+      ? LevelStatus.unavailable
+      : currentScore < scoreToDone
+          ? LevelStatus.available
+          : LevelStatus.completed;
 }
 
 enum LevelStatus {
