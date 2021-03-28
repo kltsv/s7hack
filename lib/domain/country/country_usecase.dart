@@ -61,14 +61,14 @@ const _initIceland = Country(
   AppAssets.icelandLogo,
   AppAssets.icelandBackground,
   [
-    Level('Снайфедльс', GameConfig(8, 6, 15), LevelStatus.available, 0),
+    Level('Снайфедльс', GameConfig(7, 5, 20), LevelStatus.available, 0),
     Level(
-        'Фаградальсфьядль', GameConfig(3, 3, 25), LevelStatus.unavailable, 50),
+        'Фаградальсфьядль', GameConfig(7, 5, 30), LevelStatus.unavailable, 100),
     Level(
-        'Эйяфьядлайёкюдль', GameConfig(3, 3, 40), LevelStatus.unavailable, 200),
+        'Эйяфьядлайёкюдль', GameConfig(7, 6, 40), LevelStatus.unavailable, 300),
     Level(
       'Хваннадальсхнукюр',
-      GameConfig(3, 3, 60),
+      GameConfig(8, 6, 50),
       LevelStatus.unavailable,
       600,
     ),

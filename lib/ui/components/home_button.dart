@@ -9,7 +9,7 @@ class HomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(8.0),
         child: Image.asset(AppAssets.earthLogo),
       ),
       onTap: () => di.navigation.popToHome(),

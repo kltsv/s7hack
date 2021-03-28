@@ -13,9 +13,17 @@ class CountryItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridTile(
-          child: Image.asset(
-            country.imageAsset,
-            fit: BoxFit.contain,
+          header: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Text('${country.progress.toInt()}%')],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0)
+                .copyWith(bottom: 20),
+            child: Image.asset(
+              country.imageAsset,
+              fit: BoxFit.contain,
+            ),
           ),
           footer: FittedBox(
             fit: BoxFit.contain,

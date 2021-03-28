@@ -24,8 +24,11 @@ abstract class Country with _$Country {
 }
 
 extension CountryX on Country {
-  bool get isCompleted => currentLevel == null;
+  double get progress =>
+      ((score / levels.last.scoreToOpen) * 100).round().floorToDouble();
 
-  Level? get currentLevel => levels
-      .firstWhereOrNull((element) => element.status == LevelStatus.available);
+  bool get isCompleted => currentLevel.name == levels.last.name;
+
+  Level get currentLevel =>
+      levels.lastWhere((element) => element.status == LevelStatus.available);
 }
