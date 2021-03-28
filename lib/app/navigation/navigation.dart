@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s7hack/app/navigation/routes.dart';
 import 'package:s7hack/domain/country/models/country.dart';
 import 'package:s7hack/domain/country/models/level.dart';
-import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/ui/complete/complete_args.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/level/level_page.dart';
@@ -27,8 +27,8 @@ class Navigation {
               args: LevelPage.args(level, fromRoot: fromRoot),
             );
 
-  void showCompleteGame(GameState state) =>
-      _pushNamed(Routes.completeGame, args: state);
+  void showCompleteGame(CompleteArgs args) =>
+      _pushNamed(Routes.completeGame, args: args);
 
   void popToHome() {
     logger.info('Pop home');

@@ -16,6 +16,7 @@ class AppAssets {
   static const gondurasBackground = 'assets/gonduras_background.jpg';
 
   static const ticket = 'assets/fastest.png';
+  static const viking = 'assets/viking.png';
 
   static const accentColor = Color(0xFF97BA1E);
 

@@ -7,6 +7,8 @@ part 'level.g.dart';
 
 @freezed
 abstract class Level with _$Level {
+  static const empty = Level('', '', GameConfig.empty, 0, 0, '');
+
   const Level._();
 
   const factory Level(

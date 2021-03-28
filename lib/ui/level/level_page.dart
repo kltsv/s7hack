@@ -5,6 +5,7 @@ import 'package:s7hack/app/di.dart';
 import 'package:s7hack/domain/country/models/level.dart';
 import 'package:s7hack/domain/engine/engine.dart';
 import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/ui/complete/complete_args.dart';
 import 'package:s7hack/ui/components/board.dart';
 import 'package:s7hack/ui/components/home_button.dart';
 
@@ -44,7 +45,7 @@ class _LevelPageState extends State<LevelPage> {
     di.engineHolder.engine = _engine;
     _subscription = _engine.changes.listen((state) {
       if (state.isCompleted) {
-        di.navigation.showCompleteGame(state);
+        di.navigation.showCompleteGame(CompleteArgs(state, widget.level));
       }
     });
   }

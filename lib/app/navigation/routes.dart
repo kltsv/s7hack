@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:s7hack/app/navigation/fade_route.dart';
 import 'package:s7hack/domain/country/models/country.dart';
-import 'package:s7hack/domain/engine/models/game_state.dart';
+import 'package:s7hack/ui/complete/complete_args.dart';
 import 'package:s7hack/ui/complete/complete_page.dart';
 import 'package:s7hack/ui/country/country_page.dart';
 import 'package:s7hack/ui/home/home_page.dart';
@@ -51,7 +51,7 @@ class Routes {
     Routes.counter: (settings) =>
         _defaultRoute(settings, (context) => CounterPage()),
     Routes.completeGame: (settings) => _defaultDialogRoute(settings,
-        (context) => CompletePage(state: settings.arguments as GameState)),
+        (context) => CompletePage(args: settings.arguments as CompleteArgs)),
   };
 
   static Route<T> _defaultRoute<T>(
