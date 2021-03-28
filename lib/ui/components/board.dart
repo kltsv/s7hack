@@ -75,11 +75,10 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
       for (final change in changes) {
         final controller =
             _move(change.from.as1D(columns), change.to.as1D(columns));
-        if (controller != null) {
-          futures.add(controller.forward());
-        }
+        futures.add(controller.forward());
       }
       await Future.wait(futures);
+
       for (final change in changes) {
         _initAnim(change.from.as1D(columns));
       }
@@ -87,17 +86,17 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
 
       final futureCreates = <Future>[];
       for (final create in creates) {
+        _initCreate(create.as1D(columns));
         final controller = _createController[create];
         if (controller != null) {
-          _initCreate(create.as1D(columns));
           futureCreates.add(controller.forward());
         }
       }
-      setState(() {});
-
-      _updateArray();
 
       await Future.wait(futureCreates);
+
+      setState(() {});
+      _updateArray();
 
       for (final create in creates) {
         _clearCreate(create.as1D(columns));
@@ -168,8 +167,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initAnim(int index) {
-    final animController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
     _animController[index] = animController;
@@ -178,8 +177,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initExplosion(int index) {
-    final animController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     final tween = Tween(begin: 1.0, end: 0.0);
     final curved = CurveTween(curve: Curves.easeOutBack);
     final animation = curved.animate(tween.animate(animController));
@@ -188,8 +187,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initCreate(int index) {
-    final animController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+    final animController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     final tween = Tween(begin: 0.0, end: 1.0);
     final curved = CurveTween(curve: Curves.ease);
     final animation = curved.animate(tween.animate(animController));
@@ -265,9 +264,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     logger.info('Swapped: $a, $b');
   }
 
-  AnimationController? _move(int from, int to) {
+  AnimationController _move(int from, int to) {
     _tween[from]!.end = _buildOffset(from, to);
-    return _animController[from];
+    return _animController[from]!;
   }
 
   Offset _buildOffset(int from, int to) {
