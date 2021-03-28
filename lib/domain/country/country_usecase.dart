@@ -29,7 +29,7 @@ class CountryUseCase {
   }
 
   Future<void> init() async {
-    final raw = null;//di.cache.load(_countriesKey);
+    final raw = di.cache.load(_countriesKey);
     final id = di.cache.load(_currentCountryKey);
     if (raw != null && id != null) {
       _countries = Countries.fromJson(raw);
