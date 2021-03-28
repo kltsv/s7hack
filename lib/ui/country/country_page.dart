@@ -25,8 +25,15 @@ class _CountryPageState extends State<CountryPage> {
             SliverAppBar(
               leading: const HomeButton(),
               expandedHeight: 200,
+              backgroundColor: Colors.transparent,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text(widget.country.name),
+                title: Text(
+                  widget.country.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(color: Colors.white),
+                ),
                 background: Image.asset(
                   widget.country.backgroundAsset,
                   fit: BoxFit.fill,

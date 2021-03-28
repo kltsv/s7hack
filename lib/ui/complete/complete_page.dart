@@ -8,6 +8,18 @@ class CompletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 64.0),
+      child: Material(
+        color: Colors.transparent,
+        child: Card(
+          child: Container(
+            child: Center(
+              child: Text('Заработано очков: ${state.score}'),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

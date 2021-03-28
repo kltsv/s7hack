@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
         body: SafeArea(
       child: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(pinned: true),
           SliverGrid.count(
             crossAxisCount: 3,
             children: di.countriesRepo.countries

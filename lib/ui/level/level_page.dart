@@ -65,8 +65,16 @@ class _LevelPageState extends State<LevelPage> {
           slivers: [
             SliverAppBar(
               automaticallyImplyLeading: !widget.fromRoot,
-              actions: [HomeButton()],
+              leading: widget.fromRoot ? HomeButton() : null,
+              actions: widget.fromRoot ? null : [HomeButton()],
               pinned: true,
+              backgroundColor: Colors.transparent,
+              textTheme: Theme.of(context).textTheme.copyWith(
+                    headline6: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(color: Colors.black87),
+                  ),
               title: Text(widget.level.name),
               centerTitle: true,
             ),
@@ -94,7 +102,10 @@ class _LevelPageState extends State<LevelPage> {
                   if (state == null) {
                     return Container(child: Text('Unknown state'));
                   }
-                  return Board(engine: di.engine);
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Board(engine: di.engine),
+                  );
                 },
               ),
             ),
