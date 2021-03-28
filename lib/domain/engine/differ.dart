@@ -73,7 +73,6 @@ MapEntry<List<ItemDiffChange>, Set<Index>> newCalcChangeDiff(
         final item = collapsedField[i][j];
         if (item != null && i < lowest) {
           diff.add(ItemDiffChange(Index(i, j), Index(i + counter, j), item));
-          print('LGGR ${diff.last}');
         }
       }
     }

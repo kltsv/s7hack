@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:s7hack/domain/engine/datagen.dart';
 import 'package:s7hack/domain/engine/indexer.dart';
@@ -117,6 +118,5 @@ class Engine {
   }
 }
 
-Item _generateRandomItem(ItemIndexer indexer) =>
-    Item(indexer.getAndIncrement(), ItemType.plane
-        /*ItemType.values[Random().nextInt(ItemType.values.length)]*/);
+Item _generateRandomItem(ItemIndexer indexer) => Item(indexer.getAndIncrement(),
+    ItemType.values[Random().nextInt(ItemType.values.length)]);

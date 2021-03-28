@@ -149,9 +149,9 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
     widget = value != null && _explodeAnimation[i] != null
         ? ScaleTransition(scale: _explodeAnimation[i]!, child: widget)
         : widget;
-    widget = value != null && _animation[value.id] != null
+    widget = value != null && _animation[i] != null
         ? SlideTransition(
-            position: _animation[value.id]!,
+            position: _animation[i]!,
             child: widget,
           )
         : widget;
@@ -168,17 +168,13 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   void _initAnim(int index) {
-    final value = _array[index];
-    if (value == null) {
-      return;
-    }
     final animController = AnimationController(
         duration: Duration(milliseconds: 2000), vsync: this);
     final tween = Tween(begin: Offset.zero, end: Offset.zero);
     final animation = tween.animate(animController);
-    _animController[value.id] = animController;
-    _animation[value.id] = animation;
-    _tween[value.id] = tween;
+    _animController[index] = animController;
+    _animation[index] = animation;
+    _tween[index] = tween;
   }
 
   void _initExplosion(int index) {
@@ -270,13 +266,8 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
   }
 
   AnimationController? _move(int from, int to) {
-    final fromValue = _array[from]?.id;
-    if (fromValue == null) {
-      return null;
-    }
-    _tween[fromValue]!.end = _buildOffset(from, to);
-
-    return _animController[fromValue];
+    _tween[from]!.end = _buildOffset(from, to);
+    return _animController[from];
   }
 
   Offset _buildOffset(int from, int to) {
