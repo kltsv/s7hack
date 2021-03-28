@@ -145,24 +145,24 @@ class _BoardState extends State<Board> with TickerProviderStateMixin {
               ],
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: itemSize),
-            ),
-            Positioned.fill(
-              child: Align(
-                child: Container(
-                    padding: EdgeInsets.all(24),
-                    child: TextButton.icon(
-                        onPressed: () {
-                          _engine.refreshField();
-                        },
-                        icon: Icon(Icons.refresh),
-                        label: Text("Обновить все поле")),
+              child: SizedBox(
+                height: itemSize,
+                child: Positioned.fill(
+                  child: Align(
+                    child: Container(
+                      padding: EdgeInsets.all(24),
+                      child: TextButton.icon(
+                          onPressed: () {
+                            _engine.refreshField();
+                          },
+                          icon: Icon(Icons.refresh),
+                          label: Text("Обновить все поле")),
+                    ),
+                    alignment: Alignment.bottomCenter,
+                  ),
                 ),
-                alignment: Alignment.topRight,
               ),
-
             ),
-
           ],
         );
       },

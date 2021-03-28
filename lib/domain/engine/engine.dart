@@ -29,7 +29,10 @@ class Engine {
       field: generateField(config.rows, config.columns, _indexer),
       stepCount: config.steps,
     );
+    _config = config;
   }
+
+  GameConfig _config = GameConfig.empty;
 
   final _controller = StreamController<GameState>.broadcast();
 
@@ -67,7 +70,9 @@ class Engine {
   }
 
   void refreshField() {
-
+    final newField = generateField(_config.rows, _config.columns, _indexer);
+    _state = _state.copyWith(field: newField, diff: Diff.empty);
+    _push();
   }
 
   bool _performChange(Index from, Index to, List<List<Item>> field) {
