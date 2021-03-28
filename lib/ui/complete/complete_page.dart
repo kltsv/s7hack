@@ -25,12 +25,28 @@ class CompletePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(AppAssets.viking),
                       Container(
-                        padding: EdgeInsets.only(bottom: 24),
-                        child: Text("Открыта статья \"${args.level.description}\"!", style: Theme.of(context)
-                            .textTheme
-                            .subtitle2),
+                          padding: EdgeInsets.all(36),
+                          child: Image.asset(AppAssets.viking),
+                      ),
+                      Container(
+                          padding: EdgeInsets.only(top: 24)
+                      ),
+                      Text("Открыт материал \"${args.level.description}\"!", style: Theme.of(context)
+                          .textTheme
+                          .subtitle2),
+                      TextButton(
+                        onPressed: () {
+                          di.navigation.openLink(args.level.bonusUrl);
+                        },
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.symmetric(vertical: 16.0),
+                          child: Text('Смотреть статью'),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 48)
                       ),
                       Text(
                         'Заработано очков',
@@ -38,10 +54,10 @@ class CompletePage extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2
-                            ?.copyWith(fontSize: 16),
+                            ?.copyWith(fontSize: 14),
                       ),
                       Text('${args.gameState.score}',
-                          style: Theme.of(context).textTheme.headline4),
+                          style: Theme.of(context).textTheme.headline5),
                     ],
                   ),
                 ),
